@@ -8,6 +8,9 @@
 # ipaddress module docs can be found here:
 # https://docs.python.org/dev/howto/ipaddress.html#ipaddress-howto
 #
+# socket module docs found here:
+# https://docs.python.org/2/library/socket.html#module-socket
+#
 
 
 from sys import argv
