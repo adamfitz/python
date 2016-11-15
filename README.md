@@ -1,4 +1,14 @@
-Collection of useful python scripts
+Collection of python scripts
 
-- SubnetCheck.py -
-This script iterates through a supplied subnet  and returns the output of all A records in the IP address block.
+- subnetCheck.py -
+
+Description:
+A script written to take an IP address block and return all the PTR records that exist for IPs in that address block.  This script uses the ipaddress module to validate the CIDR notation of the address block provided by the user and return the number of valid address in the provided address block.  Then iterates thorough all the valid host IPs int he provided address block and print the IP address and the hostname, no value is returned for IPs that do not have a corresponding PTR.
+
+WIP:
+- Function to sanitise input and support IP address and subnet mask notation
+- Error handling function
+- Script usage/help function
+- Cleaner code
+
+

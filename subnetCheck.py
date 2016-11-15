@@ -11,8 +11,6 @@
 # socket module docs found here:
 # https://docs.python.org/2/library/socket.html#module-socket
 #
-
-
 from sys import argv
 import ipaddress
 import socket
@@ -27,10 +25,12 @@ usersIpBlock = ipaddress.ip_network(unicodeAddressBlock, strict=False)
 
 #get the total number of IPs in the supplied address block
 numberOfIpv4HostAddresses = usersIpBlock.num_addresses
+
 #Output some basic information to the screen
 print ""
 print "Your have entered the network: %s" % (addressBlock)
 print "The number of addresses in this subnet is: %d" % (numberOfIpv4HostAddresses)
+print ""
 
 #retrieve all the host ips from the IPv4Network class
 allHostIps = list(usersIpBlock.hosts())
@@ -38,39 +38,17 @@ allHostIps = list(usersIpBlock.hosts())
 #convert the unicode list back to a byte string list 
 ipsToIterateThrough = map(str, allHostIps)
 
-#function to do teh DNS lookup and print the results to the screen
-
+#function to do the DNS lookup and print the results to the screen
 def getDnsRecords():
 	for i in ipsToIterateThrough:
-		print "%-20s %-20s" % (i, socket.gethostbyaddr(i))
+		try:
+			ptr_record = list(socket.gethostbyaddr(i))
+			print "%-20s %-20s" % (i, ptr_record[0])
+		except socket.herror as unknownHostError:
+			continue
 
-#i suppose we should actually call the function if we want it to do something...
-#getDnsRecords()
+# call the function
 getDnsRecords()
 
-
-
-#convert the type of the elements in the list to a string as this is required
-#for the socket.gethostbyaddr() function
-recordsToReturn = usersIpBlock.hosts()
-changeToList = list(recordsToReturn)
-
-#define a function to iterate through the list
-#def getDnsRecords():
-#	for i in changeToList:
-#		print (i, socket.getfqdn('i') 
-		#print socket.gethostbyaddr(str(i))
-
-#call the function to iterate through the list
-#getDnsRecords()
-
-#Function to do the DNS lookup for he supplied subnet
-
-#recordsToReturn = usersIpBlock.hosts()
-
-#print type(recordsToReturn)
-#for x in recordsToReturn:
-#	print socket.gethostbyaddr('')
-#	print x
 	
 	
