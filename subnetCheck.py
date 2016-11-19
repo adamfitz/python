@@ -16,42 +16,42 @@ from sys import argv
 import ipaddress
 import socket
 
-script, addressBlock = argv
+script, address_block = argv
 
 #convert the user supplied address block to unicode object
-unicodeAddressBlock = unicode(addressBlock)
+unicode_address_block = unicode(address_block)
 
 #create an IPv4Network class from the entered user data
-usersIpBlock = ipaddress.ip_network(unicodeAddressBlock, strict=False)
+users_ip_block = ipaddress.ip_network(unicode_address_block, strict=False)
 
 #get the total number of IPs in the supplied address block
-numberOfIpv4HostAddresses = usersIpBlock.num_addresses
+number_of_ipv4_host_addresses = users_ip_block.num_addresses
 
 #Output some basic information to the screen
 print ("")
-print ("Your have entered the network: %s" % (addressBlock))
-print ("The number of addresses in this subnet is: %d" % (numberOfIpv4HostAddresses))
+print ("Your have entered the network: %s" % (address_block))
+print ("The number of addresses in this subnet is: %d" % (number_of_ipv4_host_addresses))
 print ("")
 
 #retrieve all the host ips from the IPv4Network class
-allHostIps = list(usersIpBlock.hosts())
+all_host_ips = list(users_ip_block.hosts())
 
 #convert the unicode list back to a byte string list 
-ipsToIterateThrough = map(str, allHostIps)
+ips_to_iterate_through = map(str, all_host_ips)
 
 #function to do the DNS lookup and print the results to the screen
-def getDnsRecords():
+def get_dns_records():
 	#var to count the number of returned PTRs
-	totalNumberOfReturnedPtrRecords = 0
+	total_number_of_returned_ptr_records = 0
 
-	for i in ipsToIterateThrough:
+	for i in ips_to_iterate_through:
 		try:
 			ptr_record = list(socket.gethostbyaddr(i))
 			print ("%-20s %-20s" % (i, ptr_record[0]))
-			totalNumberOfReturnedPtrRecords = totalNumberOfReturnedPtrRecords + 1
+			total_number_of_returned_ptr_records = total_number_of_returned_ptr_records + 1
 		except socket.herror as unknownHostError:
 			continue
-	print ("\nThe number PTR records found is: %s, out of a potential %s" % (totalNumberOfReturnedPtrRecords, numberOfIpv4HostAddresses))
+	print ("\nThe number PTR records found is: %s, out of a potential %s" % (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
 
 # call the function
-getDnsRecords()
+get_dns_records()
