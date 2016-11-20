@@ -24,13 +24,16 @@ unicode_address_block = unicode(address_block)
 #create an IPv4Network class from the entered user data
 users_ip_block = ipaddress.ip_network(unicode_address_block, strict=False)
 
+#get the subnet mask
+address_block_subnet_mask = str(users_ip_block.netmask)
+
 #get the total number of IPs in the supplied address block
 number_of_ipv4_host_addresses = users_ip_block.num_addresses
 
 #Output some basic information to the screen
 print ("")
-print ("Your have entered the network: %s" % (address_block))
-print ("The number of addresses in this subnet is: %d" % (number_of_ipv4_host_addresses))
+print ("Your have entered the network: %s, the subnet mask is: %s" % (address_block, address_block_subnet_mask))
+print ("The number of addresses in this address block is: %d" % (number_of_ipv4_host_addresses))
 print ("")
 
 #retrieve all the host ips from the IPv4Network class
