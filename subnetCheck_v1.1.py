@@ -47,20 +47,19 @@ def get_dns_records():
 
 def validate_user_input():
 	parser = argparse.ArgumentParser(description="Validate users IPv4 address block") #create argument parser object
-	parser.add_argument("v4_block", required=True, type=str)
+	parser.add_argument("CIDR address block", required=True, type=str)
+	args = parser.parse_args()
 
-
-
-if __name__ == "__main__":
-	script = argv[0]
- 	try:
-		address_block = argv[1]
-		#address_block.split("/")
-		#arg1 = sys.argv[1]
+def main():
+	try:
+		validate_user_input()
 	except ValueError:
 		print ("Please enter a valid IPv4 address block in CIDR notation.")
 		sys.exit(1)
 	else:
 		get_dns_records()
-else:
-	print ("Please enter a valid IPv4 address block in CIDR notation.")
+
+
+if __name__ == "__main__":
+	main()
+ 	
