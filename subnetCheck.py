@@ -42,6 +42,8 @@ all_host_ips = list(users_ip_block.hosts())
 #convert the unicode list back to a byte string list 
 ips_to_iterate_through = map(str, all_host_ips)
 
+
+
 #function to do the DNS lookup and print the results to the screen
 def get_dns_records():
 	#var to count the number of returned PTRs
@@ -56,5 +58,22 @@ def get_dns_records():
 			continue
 	print ("\nThe number PTR records found is: %s, out of a potential %s" % (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
 
-# call the function
-get_dns_records()
+
+def main():
+	if argv == 1:
+		try:
+			address_block is not None
+		except ValueError as ipv4AddressBlockNotProvided:
+			print ("Please enter a valid IPv4 address block in CIDR notation.")
+			raise
+		finally:
+			pass
+		
+		exit(1)
+	elif argv > 2:
+		#script_usage()
+		print ("TO many arguments, in this case we will print out the usage/help screen :)")
+	elif argv == 2:
+		print ("Yay lets check that the IPv4 address is valid and if not return a helpful exception! ")
+	else:
+		get_dns_records()
