@@ -3,7 +3,7 @@
 # Author: Adam Fitzgerald
 # Purpose: Script to iterate though all IPs in an IP address block and outputs
 # the PTR records if they are found
-# Version: 1.1
+# Version: 1.2
 #
 # ipaddress module docs can be found here:
 # https://docs.python.org/dev/howto/ipaddress.html#ipaddress-howto
@@ -16,13 +16,12 @@ from sys import argv
 import sys
 import ipaddress
 import socket
-import argparse
 
 def get_dns_records():
 
 		unicode_address_block = unicode(address_block) 								#convert the user supplied address block to unicode object
 		users_ip_block = ipaddress.ip_network(unicode_address_block, strict=False) 	#create an IPv4Network class from the entered user data
-		address_block_subnet_mask = str(users_ip_block.netmask) 					#get the subnet mask
+		address_block_subnet_mask = str(users_ip_block.netmask) 					#get the subnet mask as string
 		number_of_ipv4_host_addresses = users_ip_block.num_addresses 				#get the total number of IPs in the supplied address block
 
 		#Output some basic information to the screen
@@ -45,20 +44,41 @@ def get_dns_records():
 				continue
 		print ("\nThe number PTR records found is: %s, out of a potential %s" % (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
 
+def usage_function():
+	print ("")
+	print ("subnetCheck Script usage:")
+	print ("")
+	print ("")
+	print ("")
+	print ("")
+
 def validate_user_input():
-	parser = argparse.ArgumentParser(description="Validate users IPv4 address block") #create argument parser object
-	parser.add_argument("CIDR address block", required=True, type=str)
-	args = parser.parse_args()
+	user_cidr_block = argv[1]														#assign proviedd CIDR block to a list
+	subnetmask_bits = user_cidr_block.split("/")									#separate he mask bits (after the /)
+	subnetmask_bits_string = subnetmask_bits[1]
+	subnetmask_bits_integer = int(subnetmask_bits_string)
+	if len(subnetmask_bits) != 2:
+		usage_function()
+	elif (subnetmask_bits_integer < 1):
+		print ("The prefix bits should not be less than 1")
+		print ("You entered:",subnetmask_bits_integer)
+		usage_function()
+	elif subnetmask_bits_integer > 32:
+		print ("The prefix bits should not be greater than 32")
+		print ("You entered:",subnetmask_bits_integer)
+		usage_function()
+	else: #(subnetmask_bits[1] >=1) and (subnetmask_bits[1] <= 32)
+		print ("Validated input, carry on...")
+		return 0
 
 def main():
-	try:
+	if len(argv) != 2:
+		usage_function()
+	elif len(argv) == 2:
 		validate_user_input()
-	except ValueError:
-		print ("Please enter a valid IPv4 address block in CIDR notation.")
-		sys.exit(1)
+		get_dns_records()
 	else:
 		get_dns_records()
-
 
 if __name__ == "__main__":
 	main()

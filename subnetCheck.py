@@ -39,7 +39,7 @@ print ("")
 #retrieve all the host ips from the IPv4Network class
 all_host_ips = list(users_ip_block.hosts())
 
-#convert the unicode list back to a byte string list 
+#convert the unicode list back to a byte string list
 ips_to_iterate_through = map(str, all_host_ips)
 
 
@@ -68,7 +68,7 @@ def main():
 			raise
 		finally:
 			pass
-		
+
 		exit(1)
 	elif argv > 2:
 		#script_usage()
