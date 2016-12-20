@@ -15,6 +15,9 @@ WIP:
 Script Current version: 1.2
 
 Vesioning:
+
 subnetCheck.py = original hack
+
 subnetCheck_v1.1.py = trying to get fancy, script kind of works
+
 subnetCheck_v1.2.py = Current Version
