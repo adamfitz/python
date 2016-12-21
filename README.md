@@ -12,7 +12,7 @@ WIP:
 - Script usage/help function
 - Cleaner code
 
-Script Current version: 1.2
+Script Current version: 1.3
 
 Vesioning:
 
@@ -20,4 +20,6 @@ subnetCheck.py = original hack
 
 subnetCheck_v1.1.py = trying to get fancy, script kind of works
 
-subnetCheck_v1.2.py = Current Version
+subnetCheck_v1.2.py = hacking around to add input validation
+
+subnetCheck_v1.3.py = closer to finishing up input validation
