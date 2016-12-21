@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #
 # Author: Adam Fitzgerald
-# Purpose: Script to iterate though all IPs in an IP address block and outputs
-# the PTR records if they are found
-# Version: 1.2
+# Purpose: Script to iterate though all IPs in an IP address block and output
+# PTR records if they are found
+# Version: 1.3
 #
 # ipaddress module docs can be found here:
 # https://docs.python.org/dev/howto/ipaddress.html#ipaddress-howto
@@ -13,7 +13,6 @@
 #
 from __future__ import print_function
 from sys import argv
-import sys
 import ipaddress
 import socket
 
@@ -72,11 +71,18 @@ def subnet_check_usage():
 
 def validate_user_input():
 	try:
+		#split the input into subnet bits
 		subnetmask_bits = user_cidr_block.split("/")
 		subnetmask_bits_string = subnetmask_bits[1]
 		subnetmask_bits_integer = int(subnetmask_bits_string)
+		#validate network bits (4 octets) - WIP
+		network_address = subnetmask_bits[0]]
+		network_address_octects = network_address.split(".")
+
 
 		if len(subnetmask_bits) != 2:
+			subnet_check_usage()
+		elif len(network_address_octects) < 3:
 			subnet_check_usage()
 		elif user_cidr_block == "-h":
 			subnet_check_usage()
