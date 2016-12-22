@@ -76,9 +76,8 @@ def validate_user_input():
 		subnetmask_bits_string = subnetmask_bits[1]
 		subnetmask_bits_integer = int(subnetmask_bits_string)
 		#validate network bits (4 octets) - WIP
-		network_address = subnetmask_bits[0]]
+		network_address = subnetmask_bits[0]
 		network_address_octects = network_address.split(".")
-
 
 		if len(subnetmask_bits) != 2:
 			subnet_check_usage()
