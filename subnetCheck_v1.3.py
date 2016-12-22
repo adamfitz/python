@@ -31,8 +31,10 @@ def get_dns_records():
 
 	#Output some basic information
 	print ("")
-	print ("Your have entered the network: {0}, the subnet mask is: {1}".format(user_cidr_block, address_block_subnet_mask))
-	print ("The number of IP addresses in this address block is: {0}".format(number_of_ipv4_host_addresses))
+	print ("Your have entered the network: {0}, the subnet mask is: {1}".format
+		(user_cidr_block, address_block_subnet_mask))
+	print ("The number of IP addresses in this address block is: {0}".format
+		(number_of_ipv4_host_addresses))
 	print ("")
 	#get all the host IPs
 	all_host_ips = list(users_ip_block.hosts())
@@ -41,14 +43,17 @@ def get_dns_records():
 	#var to count the number of returned PTRs
 	total_number_of_returned_ptr_records = 0
 
-	for i in ips_to_iterate_through: #need to write if statement for a single IP and throw it out of the loop if only 1 address is given
+	# need to write if statement for a single IP and throw it out of the loop
+	# if only 1 address is given
+	for i in ips_to_iterate_through:
 		try:
 			ptr_record = list(socket.gethostbyaddr(i))
 			print ("%-20s %-20s" % (i, ptr_record[0]))
 			total_number_of_returned_ptr_records = total_number_of_returned_ptr_records + 1
 		except socket.herror as unknownHostError:
 			continue
-	print ("\nThe number of returned PTR records is: %s, out of a potential %s" % (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
+	print ("\nThe number of returned PTR records is: %s, out of a potential %s"
+		% (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
 
 def subnet_check_usage():
 	print ("")
@@ -71,11 +76,11 @@ def subnet_check_usage():
 
 def validate_user_input():
 	try:
-		#split the input into subnet bits
+		#split the input into subnet bits for validation
 		subnetmask_bits = user_cidr_block.split("/")
 		subnetmask_bits_string = subnetmask_bits[1]
 		subnetmask_bits_integer = int(subnetmask_bits_string)
-		#validate network bits (4 octets) - WIP
+		#split network bits into 4 octets for validation
 		network_address = subnetmask_bits[0]
 		network_address_octects = network_address.split(".")
 
