@@ -3,13 +3,14 @@
 Author: Adam Fitzgerald
 Purpose: Take an IPv4 address block in CIDR notation and return all DNS records
 found in that IPv4 address block.
+
 Version: 1.3
 
 Usage:
-subnetCheck_v1.3.py -h (prints the help screen)
-subnetCheck_v1.3.py 192.0.2.0/24
-subnetCheck_v1.3.py 198.51.100.0/25
-subnetCheck_v1.3.py 203.0.113.0/29
+subnet_check.py -h (prints the help screen)
+subnet_check.py 192.0.2.0/24
+subnet_check.py 198.51.100.0/25
+subnet_check.py 203.0.113.0/29
 
 All correct CIDR notation is accepted however be aware the script may appear
 to hang or pause for an excessive period of time when iterating through
@@ -73,13 +74,13 @@ def subnet_check_usage():
 	print ("")
 	print (
 	"""
-	subnet_check script Version 1.3
+	subnet_check script
 	Usage: -h (prints this help screen)
 
 	Take an IPv4 address block in CIDR notation and return all DNS records found
 	in that IPv4 address block.
 
-	Example: subnetCheck_v1.3.py 172.16.0.1/16
+	Example: subnet_check.py 172.16.0.1/16
 
 	Warning: The script may take some time to run when address blocks larger
 	than /24 are supplied.  The script may also appear to be hung or pause
