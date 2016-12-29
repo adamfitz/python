@@ -1,16 +1,30 @@
 #!/usr/bin/env python
-#
-# Author: Adam Fitzgerald
-# Purpose: Script to iterate though all IPs in an IP address block and output
-# PTR records if they are found
-# Version: 1.3
-#
-# ipaddress module docs can be found here:
-# https://docs.python.org/dev/howto/ipaddress.html#ipaddress-howto
-#
-# socket module docs found here:
-# https://docs.python.org/2/library/socket.html#module-socket
-#
+"""
+Author: Adam Fitzgerald
+Purpose: Take an IPv4 address block in CIDR notation and return all DNS records
+found in that IPv4 address block.
+Version: 1.3
+
+Usage:
+subnetCheck_v1.3.py -h (prints the help screen)
+subnetCheck_v1.3.py 192.0.2.0/24
+subnetCheck_v1.3.py 198.51.100.0/25
+subnetCheck_v1.3.py 203.0.113.0/29
+
+All correct CIDR notation is accepted however be aware the script may appear
+to hang or pause for an excessive period of time when iterating through
+large address blocks or if there are not many DNS records are present/found.
+
+Modules:
+The ipaddress and socket modules are used.
+
+ipaddress module docs found here:
+https://docs.python.org/dev/howto/ipaddress.html#ipaddress-howto
+
+socket module docs found here:
+https://docs.python.org/2/library/socket.html#module-socket
+"""
+
 from __future__ import print_function
 from sys import argv
 import ipaddress
@@ -31,9 +45,9 @@ def get_dns_records():
 
 	#Output some basic information
 	print ("")
-	print ("Your have entered the network: {0}, the subnet mask is: {1}".format
+	print ("You have entered the network: {0}, the subnet mask is: {1}".format
 		(user_cidr_block, address_block_subnet_mask))
-	print ("The number of IP addresses in this address block is: {0}".format
+	print ("The number of IPv4 addresses in this address block is: {0}".format
 		(number_of_ipv4_host_addresses))
 	print ("")
 	#get all the host IPs
@@ -59,18 +73,18 @@ def subnet_check_usage():
 	print ("")
 	print (
 	"""
-	subnetCheck script version 1.3
+	subnet_check script Version 1.3
 	Usage: -h (prints this help screen)
 
-	Takes an IP address block in CIDR notation and returns all DNS records
-	for that IP address range.
+	Take an IPv4 address block in CIDR notation and return all DNS records found
+	in that IPv4 address block.
 
 	Example: subnetCheck_v1.3.py 172.16.0.1/16
 
 	Warning: The script may take some time to run when address blocks larger
-	than /24 are given.  Also the script may appear to be hung or pause
-	for an excessive period of time for large address blocks or alternatively
-	if there are not many DNS records present/found.
+	than /24 are supplied.  The script may also appear to be hung or pause
+	for an excessive period of time when iterating through large address blocks
+	or alternatively if there are not many DNS records present/found.
 	"""
 	)
 
