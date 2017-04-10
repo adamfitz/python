@@ -14,7 +14,7 @@ WIP:
 **build_env.py**
 
 Description:
-Takes user input, creates a project directorynand setups up virtualenv.
+Takes user input, creates a project directory and setups up virtualenv.
 
 Current version: 0.1
 
