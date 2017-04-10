@@ -16,5 +16,7 @@ WIP:
 Description:
 Takes user input, creates a project directorynand setups up virtualenv.
 
+Current version: 0.1
+
 WIP:
 - Everthing at the moment
