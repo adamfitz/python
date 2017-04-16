@@ -1,6 +1,6 @@
 A collection of useful (hopefully) python scripts
 
-### subnet_check.py
+## subnet_check.py
 
 Description:
 Take an IPv4 address block in CIDR notation and return all DNS records
