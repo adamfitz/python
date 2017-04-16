@@ -1,6 +1,6 @@
 A collection of useful (hopefully) python scripts
 
-**subnet_check.py**
+### subnet_check.py
 
 Description:
 Take an IPv4 address block in CIDR notation and return all DNS records
@@ -11,7 +11,7 @@ Current version: 1.3
 WIP:
 - Function to support IP address and subnet mask notation
 
-**build_env.py**
+## build_env.py
 
 Description:
 Takes user input, creates a project directory and setups up virtualenv.
@@ -19,4 +19,4 @@ Takes user input, creates a project directory and setups up virtualenv.
 Current version: 0.1
 
 WIP:
-- Everthing at the moment
+- Everything at the moment

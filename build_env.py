@@ -9,7 +9,8 @@ Script to setup a project with virtulenv
 
 - checks if the project directory already exists
 - if directory exists the script will install libraries to that directory
-- script can be run with a -il flag (install library) and will install to the specified project dir
+- script can be run with a -il flag (install library) and will install to the 
+specified project dir
 
 Constants
 
