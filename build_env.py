@@ -9,7 +9,7 @@ Script to setup a project with virtulenv
 
 - checks if the project directory already exists
 - if directory exists the script will install libraries to that directory
-- script can be run with a -il flag (install library) and will install to the 
+- script can be run with a -il flag (install library) and will install to the
 specified project dir
 
 Constants
@@ -38,17 +38,17 @@ def build_env_help():
 	build_script.py script
 	Usage: -h (prints this help screen)
 
-	This script is built for linux systems and will create a new project 
+	This script is built for linux systems and will create a new project
 	directory and setup virtualenv under this directory.
 
 	The default directory path is:
 	/home/<current user>/scripts/
 
-	So new project directories will be created in: 
+	So new project directories will be created in:
 	"/home/<current user>/scripts/<newProjectName>"
-	
+
 	Use the following flags along with a project name to start the build
-	
+
 	Create a new virtualenv called <newProjectName>
 	: build_env.py -c projectName
 	"""
@@ -69,12 +69,12 @@ def validate_user_input():
 
 """
 def check_for_dependencies():
-	# check if virtualenv is isntalled if not install it after prompting the
+	# check if virtualenv is installed if not install it after prompting the
 	#user
 """
 def create_project_directory():
-	current_user = pwd.getpwuid( os.getuid() )[ 0 ]
-	default_dir = "/home/" + current_user +"/scripts/"
+	#current_user = pwd.getpwuid( os.getuid() )[ 0 ]
+	default_dir = os.path.expanduser("~") +"/scripts/"
 	new_directory = default_dir + CONSTANT_2
 	print("")
 	print("New project directory will be created in the following location: ", \
@@ -92,8 +92,7 @@ def build_env():
 
 
 def main():
-	create_project_directory()	
+	create_project_directory()
 
 if __name__ == "__main__":
 	main()
-
