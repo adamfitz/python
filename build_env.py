@@ -73,7 +73,6 @@ def check_for_dependencies():
 	#user
 """
 def create_project_directory():
-	#current_user = pwd.getpwuid( os.getuid() )[ 0 ]
 	default_dir = os.path.expanduser("~") +"/scripts/"
 	new_directory = default_dir + CONSTANT_2
 	print("")
