@@ -21,10 +21,11 @@ Constants
 """
 
 from __future__ import print_function
+import sys
 from sys import argv
 import os
 import pwd
-
+import pip
 
 # constants for user imput
 
@@ -67,11 +68,24 @@ def validate_user_input():
 		build_env()
 """
 
-"""
-def check_for_dependencies():
-	# check if virtualenv is installed if not install it after prompting the
-	#user
-"""
+
+def check_dependencies(library):
+	try:
+		import virtualenv
+	except ImportError as e:
+		install_virtenv = input("The required python library (virtualenv) is \
+not installed globally, do you wish to install this now?: (y|n) ")
+# need to check if any other characters are typed here and deal with it
+# (rewrite as while loop)
+		if install_virtenv == "y" or install_virtenv == "Y":
+			pip.main(['install', library])
+		elif not (install_virtenv == "y" or install_virtenv == "Y"):
+			print("please enter a valid option (y|n)")
+		else:
+			print("\nThe virtualenv library is required to run this script,\
+please install this package globally before running this script again.")
+			sys.exit(1)
+
 def create_project_directory():
 	default_dir = os.path.expanduser("~") +"/scripts/"
 	new_directory = default_dir + CONSTANT_2
@@ -91,7 +105,7 @@ def build_env():
 
 
 def main():
-	create_project_directory()
+	check_dependencies('virtualenv')
 
 if __name__ == "__main__":
 	main()
