@@ -68,23 +68,30 @@ def validate_user_input():
 		build_env()
 """
 
-
 def check_dependencies(library):
+	package_present = ""
 	try:
 		import virtualenv
+		package_present = "y"
 	except ImportError as e:
-		install_virtenv = input("The required python library (virtualenv) is \
-not installed globally, do you wish to install this now?: (y|n) ")
-# need to check if any other characters are typed here and deal with it
-# (rewrite as while loop)
-		if install_virtenv == "y" or install_virtenv == "Y":
+		user_choice = input("The required python library (virtualenv) is not "\
+		"installed globally, do you wish to install this now?: (y|n) ")
+		while not (user_choice == "y" or user_choice == "Y" or user_choice \
+		=="n" or user_choice =="n"):
+			user_choice = input("Please enter a valid option, install python "\
+			"package (virtualenv) globally? (y|n) ")
+		if user_choice == "y" or user_choice == "Y":
 			pip.main(['install', library])
-		elif not (install_virtenv == "y" or install_virtenv == "Y"):
-			print("please enter a valid option (y|n)")
 		else:
-			print("\nThe virtualenv library is required to run this script,\
-please install this package globally before running this script again.")
+			print("\nThe virtualenv library is a requirement to run this "\
+			"script, please install this package globally before running this "\
+			"script again or choose \"y\" when prompted.")
 			sys.exit(1)
+	if package_present == "y":
+		print("Dependencies are already met, python package (virtualenv) is "\
+		"installed globally.")
+	else:
+		sys.exit(1)
 
 def create_project_directory():
 	default_dir = os.path.expanduser("~") +"/scripts/"
