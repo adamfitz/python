@@ -16,6 +16,12 @@ Constants
 
 1 = flag for what the script should (is being told) to do
 2 = the argument to pass to the script based on the first flag
+3 - package name to install in the define virtualenv directory
+
+Flags:
+
+-c = create a virtualenv directory with the specified name
+-i = install a package into the specified virtualenv directory
 
 
 """
@@ -31,6 +37,7 @@ import pip
 
 CONSTANT_1 = argv[1]
 CONSTANT_2 = argv[2]
+CONSTANT_3 = argv[3]
 
 def build_env_help():
 	print ("")
