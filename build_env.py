@@ -9,18 +9,18 @@ Script to setup a project with virtulenv
 
 - checks if the project directory already exists
 - if directory exists the script will install libraries to that directory
-- script can be run with a -il flag (install library) and will install to the
+- script can be run with a -i flag (install library) and will install to the
 specified project dir
 
 Constants
 
 1 = flag for what the script should (is being told) to do
-2 = the argument to pass to the script based on the first flag
-3 - package name to install in the define virtualenv directory
+2 = the package name to install or new directory to create
+3 = the virtualenv directory name where a new package will be installed
 
 Flags:
 
--c = create a virtualenv directory with the specified name
+-c = create a new project directory and setup virtualenv for this project/directory
 -i = install a package into the specified virtualenv directory
 
 
@@ -37,7 +37,7 @@ import pip
 
 CONSTANT_1 = argv[1]
 CONSTANT_2 = argv[2]
-CONSTANT_3 = argv[3]
+#CONSTANT_3 = argv[3]
 
 def build_env_help():
 	print ("")
@@ -112,14 +112,44 @@ def create_project_directory():
 	else:
 		print("\nDirectory already exists! (", new_directory, ")")
 		print("\nNo action performed...")
+	return new_directory
+
+
 """
 def build_env():
 	stuff
 """
 
+def install_package(package_name, project_directory):
+"""
+project_directory is the returned value from the previously created diretrory
+in the above function.
+
+This is used to find teh directory to install and activate virtualenv
+"""
+	package_present = ""
+	print(project_directory)
+	try:
+		import package_name
+		package_present = "y"
+	except ImportError as e:
+		user_choice = input("The requested package is not installed, do you wish to install this package now?: (y|n) ")
+		while not (user_choice == "y" or user_choice == "n"):
+			user_choice = input("Please enter a valid option, do you want to install the ",CONSTANT_2, " package (y|n) ")
+		if user_choice == "y" or user_choice == "Y":
+			pip.main(['install', package_name])
+		else:
+			print("\nYou have chosen NOT to install the following python package: ", CONSTANT_2, " . The ", CONSTANT_3, " project directory hasnot been modified.")
+			sys.exit(1)
+	if package_present == "y":
+		print("Package ",package_name, "is already installed in: ", CONSTANT_3, " project directory")
+	else:
+		sys.exit(1)
 
 def main():
-	check_dependencies('virtualenv')
+	create_project_directory()
+	project_directory = create_project_directory()
+	install_package(CONSTANT_2, project_directory)
 
 if __name__ == "__main__":
 	main()
