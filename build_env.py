@@ -16,7 +16,7 @@ Constants
 
 1 = flag for what the script should (is being told) to do
 2 = the virtualenv directory to create or where a new package will be installed
-3 = the package name to install or new directory to create
+3 = the package name to install
 
 
 Flags:
@@ -30,6 +30,7 @@ Flags:
 from __future__ import print_function
 import sys
 from sys import argv
+import subprocess
 import os
 import pwd
 import pip
@@ -144,7 +145,9 @@ def install_package(project_directory, package_name):
 		while not (user_choice == "y" or user_choice == "n"):
 			user_choice = input("Please enter a valid option, do you want to install the ",package_name, " package (y|n) ")
 		if user_choice == "y" or user_choice == "Y":
-			pip.main(['install', package_name])
+			python_binary = project_directory + "/env/bin/python"
+			command_to_execute = "python pip install " + package_name
+			subprocess.call([python_binary, command_to_execute])
 		else:
 			print("\nYou have chosen NOT to install the following python package: ", package_name, " . The ", project_directory, " project directory has not been modified.")
 			sys.exit(1)
@@ -154,6 +157,7 @@ def install_package(project_directory, package_name):
 		sys.exit(1)
 
 def main():
+	#check_dependencies('virtualenv')
 	project_directory = create_project_directory()
 	install_package(project_directory, CONSTANT_3)
 
