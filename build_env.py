@@ -37,7 +37,7 @@ import pip
 
 CONSTANT_1 = argv[1]
 CONSTANT_2 = argv[2]
-#CONSTANT_3 = argv[3]
+CONSTANT_3 = argv[3]
 
 def build_env_help():
 	print ("")
@@ -121,14 +121,14 @@ def build_env():
 """
 
 def install_package(package_name, project_directory):
-"""
-project_directory is the returned value from the previously created diretrory
-in the above function.
+	"""
+	project_directory is the returned value from the previously created diretrory
+	in the above function.
 
-This is used to find teh directory to install and activate virtualenv
-"""
+	This is used to find teh directory to install and activate virtualenv
+	"""
 	package_present = ""
-	print(project_directory)
+	print("Makeing sure that the variable is passed correctly: ", project_directory)
 	try:
 		import package_name
 		package_present = "y"
@@ -139,7 +139,7 @@ This is used to find teh directory to install and activate virtualenv
 		if user_choice == "y" or user_choice == "Y":
 			pip.main(['install', package_name])
 		else:
-			print("\nYou have chosen NOT to install the following python package: ", CONSTANT_2, " . The ", CONSTANT_3, " project directory hasnot been modified.")
+			print("\nYou have chosen NOT to install the following python package: ", CONSTANT_2, " . The ", project_directory, " project directory has not been modified.")
 			sys.exit(1)
 	if package_present == "y":
 		print("Package ",package_name, "is already installed in: ", CONSTANT_3, " project directory")
@@ -147,7 +147,6 @@ This is used to find teh directory to install and activate virtualenv
 		sys.exit(1)
 
 def main():
-	create_project_directory()
 	project_directory = create_project_directory()
 	install_package(CONSTANT_2, project_directory)
 
