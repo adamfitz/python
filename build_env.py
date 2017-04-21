@@ -122,10 +122,8 @@ def build_env():
 
 def install_package(package_name, project_directory):
 	"""
-	project_directory is the returned value from the previously created diretrory
-	in the above function.
-
-	This is used to find teh directory to install and activate virtualenv
+	Function to install a specified python library in a specified virtualenv
+	directory.
 	"""
 	package_present = ""
 	print("Makeing sure that the variable is passed correctly: ", project_directory)
