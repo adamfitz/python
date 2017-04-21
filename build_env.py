@@ -15,8 +15,9 @@ specified project dir
 Constants
 
 1 = flag for what the script should (is being told) to do
-2 = the package name to install or new directory to create
-3 = the virtualenv directory name where a new package will be installed
+2 = the virtualenv directory to create or where a new package will be installed
+3 = the package name to install or new directory to create
+
 
 Flags:
 
@@ -55,10 +56,13 @@ def build_env_help():
 	So new project directories will be created in:
 	"/home/<current user>/scripts/<newProjectName>"
 
-	Use the following flags along with a project name to start the build
+	Examples:
 
 	Create a new virtualenv called <newProjectName>
-	: build_env.py -c projectName
+	: build_env.py -c newProjectName
+
+	Install a package into the newProjectName virtualenv directory
+	: build_env.py -i newProjectName packageName
 	"""
 	)
 """
@@ -76,6 +80,10 @@ def validate_user_input():
 """
 
 def check_dependencies(library):
+	"""
+	The build environment script requires the virtualenv python library and
+	prompts to install the package if it is not already installed.
+	"""
 	package_present = ""
 	try:
 		import virtualenv
@@ -101,11 +109,14 @@ def check_dependencies(library):
 		sys.exit(1)
 
 def create_project_directory():
+	"""
+	Function checks if a project directory already exists and creates it if
+	it does not.
+	"""
 	default_dir = os.path.expanduser("~") +"/scripts/"
 	new_directory = default_dir + CONSTANT_2
 	print("")
-	print("New project directory will be created in the following location: ", \
-	default_dir)
+	print("Checking if the project directory exists (",CONSTANT_2,"), if not it will be created in the following location: ", default_dir)
 	if not os.path.exists(new_directory):
 		print("\nCreated project directory: ", new_directory)
 		os.makedirs(new_directory)
@@ -114,39 +125,37 @@ def create_project_directory():
 		print("\nNo action performed...")
 	return new_directory
 
-
 """
 def build_env():
 	stuff
 """
 
-def install_package(package_name, project_directory):
+def install_package(project_directory, package_name):
 	"""
-	Function to install a specified python library in a specified virtualenv
+	Function installs a specified python library in a specific virtualenv
 	directory.
 	"""
 	package_present = ""
-	print("Makeing sure that the variable is passed correctly: ", project_directory)
 	try:
 		import package_name
 		package_present = "y"
 	except ImportError as e:
 		user_choice = input("The requested package is not installed, do you wish to install this package now?: (y|n) ")
 		while not (user_choice == "y" or user_choice == "n"):
-			user_choice = input("Please enter a valid option, do you want to install the ",CONSTANT_2, " package (y|n) ")
+			user_choice = input("Please enter a valid option, do you want to install the ",package_name, " package (y|n) ")
 		if user_choice == "y" or user_choice == "Y":
 			pip.main(['install', package_name])
 		else:
-			print("\nYou have chosen NOT to install the following python package: ", CONSTANT_2, " . The ", project_directory, " project directory has not been modified.")
+			print("\nYou have chosen NOT to install the following python package: ", package_name, " . The ", project_directory, " project directory has not been modified.")
 			sys.exit(1)
 	if package_present == "y":
-		print("Package ",package_name, "is already installed in: ", CONSTANT_3, " project directory")
+		print("Package ",package_name, "is already installed in: ",project_directory, " project directory")
 	else:
 		sys.exit(1)
 
 def main():
 	project_directory = create_project_directory()
-	install_package(CONSTANT_2, project_directory)
+	install_package(project_directory, CONSTANT_3)
 
 if __name__ == "__main__":
 	main()
