@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Script to setup a project with virtulenv
@@ -33,7 +33,7 @@ from sys import argv
 import subprocess
 import os
 import pwd
-import pip
+#import pip3
 
 # constants for user imput
 
@@ -144,22 +144,46 @@ def install_package(project_directory, package_name):
 		user_choice = input("The requested package is not installed, do you wish to install this package now?: (y|n) ")
 		while not (user_choice == "y" or user_choice == "n"):
 			user_choice = input("Please enter a valid option, do you want to install the ",package_name, " package (y|n) ")
-		if user_choice == "y" or user_choice == "Y":
-			python_binary = project_directory + "/env/bin/python"
-			command_to_execute = "python pip install " + package_name
-			subprocess.call([python_binary, command_to_execute])
+		if user_choice == "y":
+			# run virtualenv activate script, call pip to install the package
+			activate_virtualenv = ". " + project_directory + "/env/bin/activate_this.py"
+			virtualenv_pip = project_directory + "/env/bin/pip"
+			exec(open(activate_virtualenv).read())
+			#subprocess.call([activate_virtualenv))])
+			exec(open(virtualenv_pip).read(), dict(__file__=package_name))
+			#subprocess.call([virtualenv_pip, package_name])
 		else:
-			print("\nYou have chosen NOT to install the following python package: ", package_name, " . The ", project_directory, " project directory has not been modified.")
+			print("\nYou have chosen NOT to install the following python package: ", package_name, " . The ", project_directory, " project directory has NOT been modified.")
 			sys.exit(1)
 	if package_present == "y":
 		print("Package ",package_name, "is already installed in: ",project_directory, " project directory")
 	else:
 		sys.exit(1)
 
+"""
+def check_running_in_virtualenv():
+"""
+#Funciton that checks if a virtualenv is activated
+"""
+	import sys
+	if hasattr(sys, 'real_prefix'):
+		#activate the specified virtualenv
+	else:
+		continue
+"""
+
+def setup_python3_binaries(project_directory):
+	environment_dir = project_directory + "/env"
+	if not os.path.exists(project_directory + "/env/bin/python3"):
+		print("Installing python3 binaries to: \n", environment_dir)
+		subprocess.call(['virtualenv', '-p', 'python3', environment_dir])
+	else:
+		print("Python3 binary already exists in the project directory ",environment_dir," no action taken...")
+		sys.exit(1)
+
 def main():
-	#check_dependencies('virtualenv')
-	project_directory = create_project_directory()
-	install_package(project_directory, CONSTANT_3)
+	setup_python3_binaries(create_project_directory())
+
 
 if __name__ == "__main__":
 	main()
