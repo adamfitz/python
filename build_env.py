@@ -137,6 +137,8 @@ def install_package(project_directory, package_name):
 	directory.
 	"""
 	package_present = ""
+	pip_binary = project_directory + "/env/bin/pip"
+	test = project_directory + "/env/bin/"
 	try:
 		import package_name
 		package_present = "y"
@@ -145,13 +147,11 @@ def install_package(project_directory, package_name):
 		while not (user_choice == "y" or user_choice == "n"):
 			user_choice = input("Please enter a valid option, do you want to install the ",package_name, " package (y|n) ")
 		if user_choice == "y":
-			# run virtualenv activate script, call pip to install the package
-			activate_virtualenv = ". " + project_directory + "/env/bin/activate_this.py"
-			virtualenv_pip = project_directory + "/env/bin/pip"
-			exec(open(activate_virtualenv).read())
-			#subprocess.call([activate_virtualenv))])
-			exec(open(virtualenv_pip).read(), dict(__file__=package_name))
-			#subprocess.call([virtualenv_pip, package_name])
+			#call pip from the virtualenv dir
+			print("Installing ",package_name," to: ", project_directory)
+			print("\n")
+			print(pip_binary)
+			subprocess.call([pip_binary, 'install', package_name])
 		else:
 			print("\nYou have chosen NOT to install the following python package: ", package_name, " . The ", project_directory, " project directory has NOT been modified.")
 			sys.exit(1)
@@ -182,7 +182,9 @@ def setup_python3_binaries(project_directory):
 		sys.exit(1)
 
 def main():
-	setup_python3_binaries(create_project_directory())
+	#setup_python3_binaries(create_project_directory())
+	project_directory = create_project_directory()
+	install_package(project_directory, CONSTANT_3)
 
 
 if __name__ == "__main__":
