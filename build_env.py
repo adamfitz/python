@@ -183,7 +183,7 @@ def setup_python3_binaries(project_directory):
 
 def main():
 	#try:
-	if not argv[1]:
+	if not (argv[1] == "-i" or argv[1] == "-c" or argv[1] == "-n"):
 		build_env_help()
 	if argv[1] == "-h":
 		build_env_help()
