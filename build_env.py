@@ -21,8 +21,9 @@ Constants
 
 Flags:
 
--c = create a new project directory and setup virtualenv for this project
+-n = create a new project directory and setup virtualenv for this project
 -i = install a package into the specified virtualenv directory
+-c = check if project directory exists and python3 binaries are installed in it
 
 
 """
@@ -33,13 +34,6 @@ from sys import argv
 import subprocess
 import os
 import pwd
-#import pip3
-
-# constants for user imput
-
-CONSTANT_1 = argv[1]
-CONSTANT_2 = argv[2]
-CONSTANT_3 = argv[3]
 
 def build_env_help():
 	print ("")
@@ -47,38 +41,31 @@ def build_env_help():
 	"""
 	build_script.py script
 	Usage: -h (prints this help screen)
+	===================================
 
-	This script is built for linux systems and will create a new project
-	directory and setup virtualenv under this directory.
+	This script will create a new project directory and setup virtualenv
+	under this directory.  It has been tested only on linux systems (mint 18).
 
-	The default directory path is:
+	The default directory path this script uses is:
 	/home/<current user>/scripts/
 
-	So new project directories will be created in:
+	New project directories will be created in the folowing location:
 	"/home/<current user>/scripts/<newProjectName>"
 
 	Examples:
+	=========
 
-	Create a new virtualenv called <newProjectName>
-	: build_env.py -c newProjectName
+	Create a new virtualenv environment in <newProjectName> directory
+	: build_env.py -n newProjectName
 
 	Install a package into the newProjectName virtualenv directory
 	: build_env.py -i newProjectName packageName
+
+	Check that python3 binaries are installed in the virtaulenv <newProjectName>
+	directory
+	: build_env.py -c newProjectName
 	"""
 	)
-"""
-def validate_user_input():
-    if not argv[0]:
-		build_env_help()
-	elif not argv[1]:
-		build_env_help()
-	elif argv[0] == "-h":
-		build_env_help()
-	elif argv[3] in globals():
-		build_env_help()
-	else:
-		build_env()
-"""
 
 def check_dependencies(library):
 	"""
@@ -188,9 +175,36 @@ def setup_python3_binaries(project_directory):
 		sys.exit(1)
 
 def main():
-	#setup_python3_binaries(create_project_directory())
-	project_directory = create_project_directory()
-	install_package(project_directory, CONSTANT_3)
+	try:
+		# constants for user imput
+		CONSTANT_1 = argv[1]
+		CONSTANT_2 = argv[2]
+		CONSTANT_3 = argv[3]
+
+		#if not argv[1]:
+	#		build_env_help()
+		if argv[1] == "-h":
+			build_env_help()
+		elif argv[1] == "-c":
+			check_dependencies('virtualenv')
+			create_project_directory()
+			setup_python3_binaries(create_project_directory())
+		elif argv[1] == "-n":
+			check_dependencies('virtualenv')
+			create_project_directory()
+			setup_python3_binaries(create_project_directory())
+		elif (argv[1] == "-i" and not argv[2] == None and not argv[3] == None):
+			check_dependencies('virtualenv')
+			project_directory = create_project_directory()
+			setup_python3_binaries(create_project_directory())
+			install_package(project_directory, package_name)
+		else:
+			build_env_help()
+	except IndexError as not_enough_arguments:
+		build_env_help()
+
+
+
 
 
 if __name__ == "__main__":
