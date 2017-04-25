@@ -35,6 +35,13 @@ import subprocess
 import os
 import pwd
 
+try:
+	CONSTANT_1 = argv[1]
+	CONSTANT_2 = argv[2]
+	CONSTANT_3 = argv[3]
+except IndexError as not_enough_arguments:
+	pass
+
 def build_env_help():
 	print ("")
 	print (
@@ -175,33 +182,28 @@ def setup_python3_binaries(project_directory):
 		sys.exit(1)
 
 def main():
-	try:
-		# constants for user imput
-		CONSTANT_1 = argv[1]
-		CONSTANT_2 = argv[2]
-		CONSTANT_3 = argv[3]
-
-		#if not argv[1]:
-	#		build_env_help()
-		if argv[1] == "-h":
-			build_env_help()
-		elif argv[1] == "-c":
-			check_dependencies('virtualenv')
-			create_project_directory()
-			setup_python3_binaries(create_project_directory())
-		elif argv[1] == "-n":
-			check_dependencies('virtualenv')
-			create_project_directory()
-			setup_python3_binaries(create_project_directory())
-		elif (argv[1] == "-i" and not argv[2] == None and not argv[3] == None):
-			check_dependencies('virtualenv')
-			project_directory = create_project_directory()
-			setup_python3_binaries(create_project_directory())
-			install_package(project_directory, package_name)
-		else:
-			build_env_help()
-	except IndexError as not_enough_arguments:
+	#try:
+	if not argv[1]:
 		build_env_help()
+	if argv[1] == "-h":
+		build_env_help()
+	elif argv[1] == "-c":
+		check_dependencies('virtualenv')
+		create_project_directory()
+		setup_python3_binaries(create_project_directory())
+	elif argv[1] == "-n":
+		check_dependencies('virtualenv')
+		create_project_directory()
+		setup_python3_binaries(create_project_directory())
+	elif argv[1] == "-i":
+		check_dependencies('virtualenv')
+		project_directory = create_project_directory()
+		setup_python3_binaries(create_project_directory())
+		install_package(project_directory, package_name)
+	else:
+		build_env_help()
+	#except IndexError as not_enough_arguments:
+		#build_env_help()
 
 
 
