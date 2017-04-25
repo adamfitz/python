@@ -182,10 +182,12 @@ def setup_python3_binaries(project_directory):
 		sys.exit(1)
 
 def main():
-	#try:
 	if not (argv[1] == "-i" or argv[1] == "-c" or argv[1] == "-n"):
 		build_env_help()
-	if argv[1] == "-h":
+	elif len(argv) > 3:
+		print("Too many paramaters...")
+		build_env_help()
+	elif argv[1] == "-h":
 		build_env_help()
 	elif argv[1] == "-c":
 		check_dependencies('virtualenv')
@@ -202,12 +204,6 @@ def main():
 		install_package(project_directory, package_name)
 	else:
 		build_env_help()
-	#except IndexError as not_enough_arguments:
-		#build_env_help()
-
-
-
-
 
 if __name__ == "__main__":
 	main()
