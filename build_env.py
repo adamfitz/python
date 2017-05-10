@@ -46,7 +46,6 @@ def build_env_help():
 	print ("")
 	print (
 	"""
-
 	Name:	build_env.py script
 	=====
 
@@ -66,21 +65,21 @@ def build_env_help():
 	=========
 
 	Create a new virtualenv environment in <newProjectName> directory
-	: build_env.py -n newProjectName
+	$ build_env.py -n newProjectName
 
-	Install a package into the newProjectName virtualenv directory
-	: build_env.py -i newProjectName packageName
+	Install a package into the <newProjectName> virtualenv directory
+	$ build_env.py -i newProjectName packageName
 
-	Check that the required python3 binaries are installed in the virtaulenv
+	Check that the required python3 binaries are installed in the virtulenv
 	<newProjectName> directory
-	: build_env.py -c newProjectName
+	$ build_env.py -c newProjectName
 	"""
 	)
 
 def check_dependencies(library):
 	"""
-	The build environment script requires the virtualenv python library and
-	prompts to install the package if it is not already installed.
+	The virtualenv python library is required and the script prompts to install
+	the package if it is not already installed.
 	"""
 	package_present = ""
 	try:
@@ -116,8 +115,7 @@ def check_dependencies(library):
 
 def create_project_directory():
 	"""
-	Function checks if a project directory already exists and creates it if
-	it does not.
+	Check if a project directory already exists and creates it if it does not.
 	"""
 	default_dir = os.path.expanduser("~") +"/scripts/"
 	new_directory = default_dir + CONSTANT_2
@@ -143,8 +141,7 @@ def build_env():
 
 def install_package(project_directory, package_name):
 	"""
-	Function installs a specified python library in a specific virtualenv
-	directory.
+	Install a specified python library in a specific virtualenv	directory.
 	"""
 	package_present = ""
 	pip_binary = project_directory + "/env/bin/pip"
@@ -174,19 +171,10 @@ def install_package(project_directory, package_name):
 	else:
 		sys.exit(1)
 
-"""
-def check_running_in_virtualenv():
-"""
-#Funciton that checks if a virtualenv is activated
-"""
-	import sys
-	if hasattr(sys, 'real_prefix'):
-		#activate the specified virtualenv
-	else:
-		continue
-"""
-
 def setup_python3_binaries(project_directory):
+	"""
+	Check if python3 binaries are installed in a specific virtualenv directory.
+	"""
 	python3_inst = "n"
 	environment_dir = project_directory + "/env"
 	if not os.path.exists(project_directory + "/env/bin/python3"):
@@ -202,6 +190,10 @@ def setup_python3_binaries(project_directory):
 		sys.exit(1)
 
 def check_project_dependencies(a, b, c):
+	"""
+	Checks if the project directory is already setup (virtualenv package,
+	python3 binaries are installed in the specified project directory).
+	"""
 	virtualenv_inst = a
 	dir_exist = b
 	python3_inst = c
@@ -222,7 +214,7 @@ def check_project_dependencies(a, b, c):
 		good_to_go = "no go"
 		return good_to_go
 	else:
-		print("All reqirements are met, viretualenv is installed, the projecy "\
+		print("All reqirements are met, virtualenv is installed, the project "\
 		"directory exists and python 3 is installed in the project directory")
 		good_to_go = "ok"
 		return good_to_go
