@@ -85,8 +85,6 @@ def check_dependencies(library):
 	try:
 		import virtualenv
 		package_present = "y"
-		virtualenv_inst = "y"
-		return package_present
 	except ImportError as e:
 		user_choice = input("The required python library (virtualenv) is not "\
 		"installed globally, do you wish to install this now?: (y|n) ")
@@ -96,20 +94,14 @@ def check_dependencies(library):
 			"package (virtualenv) globally? (y|n) ")
 		if user_choice == "y" or user_choice == "Y":
 			pip.main(['install', library])
-			virtualenv_inst == "y"
-			return virtualenv_inst
 		else:
 			print("\nThe virtualenv library is a requirement to run this "\
 			"script, please install this package globally before running this "\
 			"script again or choose \"y\" when prompted.")
-			virtualenv_inst == "n"
-			return virtualenv_inst
 			sys.exit(1)
 	if package_present == "y":
 		print("Dependencies are already met, python package (virtualenv) is "\
 		"installed globally.")
-		virtualenv_inst == "y"
-		return virtualenv_inst
 	else:
 		sys.exit(1)
 
@@ -125,19 +117,11 @@ def create_project_directory():
 	if not os.path.exists(new_directory):
 		print("\nCreated project directory: ", new_directory)
 		os.makedirs(new_directory)
-		dir_exist = "y"
-		return dir_exist
 	else:
 		print("\nDirectory already exists! (", new_directory, ")")
 		print("\nNo action performed...")
-		dir_exist = "y"
-		return dir_exist
 	return new_directory
 
-"""
-def build_env():
-	stuff
-"""
 
 def install_package(project_directory, package_name):
 	"""
@@ -180,66 +164,27 @@ def setup_python3_binaries(project_directory):
 	if not os.path.exists(project_directory + "/env/bin/python3"):
 		print("Installing python3 binaries to: \n", environment_dir)
 		subprocess.call(['virtualenv', '-p', 'python3', environment_dir])
-		python3_inst = "y"
-		return python3_inst
 	else:
 		print("Python3 binary already exists in the project directory ",\
 		environment_dir," no action taken...")
-		python3_inst = "y"
-		return python3_inst
-		sys.exit(1)
-
-def check_project_dependencies(a, b, c):
-	"""
-	Checks if the project directory is already setup (virtualenv package,
-	python3 binaries are installed in the specified project directory).
-	"""
-	virtualenv_inst = a
-	dir_exist = b
-	python3_inst = c
-	if virtualenv_inst == "n":
-		print("The requrired python library virtualenv is not installed, "\
-		"please install this library to continue")
-		good_to_go = "no go"
-		return good_to_go
-	elif dir_exist == "n":
-		print("The directory you have specified does not exist and you did "\
-		"not choose to create it.  This is a requirement please create the "\
-		"directory and start again")
-		good_to_go = "no go"
-		return good_to_go
-	elif python3_inst == "n":
-		print("Python 3 is not isntalled in the specified directory "\
-		"please install python 3 to continue")
-		good_to_go = "no go"
-		return good_to_go
-	else:
-		print("All reqirements are met, virtualenv is installed, the project "\
-		"directory exists and python 3 is installed in the project directory")
-		good_to_go = "ok"
-		return good_to_go
 
 def main():
 	if (len(argv) < 2 or len(argv) > 4):
-		print("Too many or too few paramaters...")
+		print("-*- Too many or too few paramaters... -*- ")
 		build_env_help()
-	elif argv[1] == "-h":
+	elif CONSTANT_1 == "-h":
 		build_env_help()
-	elif (argv[1] == "-c" and len(argv) == 3):
-		project_directory = argv[2]
-		a = check_dependencies('virtualenv')
-		b = create_project_directory()
-		c = setup_python3_binaries(project_directory)
-		check_project_dependencies(a, b, c)
-	elif (argv[1] == "-n" and len(argv) == 3):
-		check_dependencies('virtualenv')
-		create_project_directory()
-		setup_python3_binaries(create_project_directory())
-	elif (argv[1] == "-i" and len(argv) == 4):
-		package_name = argv[3]
+	# creates new project directory
+	elif (CONSTANT_1 == "-n" and len(argv) == 3):
 		check_dependencies('virtualenv')
 		project_directory = create_project_directory()
-		setup_python3_binaries(create_project_directory())
+		setup_python3_binaries(project_directory)
+	# installs a package
+	elif (CONSTANT_1 == "-i" and len(argv) == 4):
+		package_name = CONSTANT_3
+		check_dependencies('virtualenv')
+		project_directory = create_project_directory()
+		setup_python3_binaries(project_directory)
 		install_package(project_directory, package_name)
 	else:
 		build_env_help()
