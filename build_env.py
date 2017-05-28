@@ -78,32 +78,26 @@ def build_env_help():
 
 def check_dependencies(library):
 	"""
-	The virtualenv python library is required and the script prompts to install
+	The virtualenv python3 library is required and the script prompts to install
 	the package if it is not already installed.
 	"""
-	package_present = ""
 	try:
 		import virtualenv
-		package_present = "y"
+		print("Dependencies are already met, python3 package (virtualenv) is "\
+		"installed globally.")
 	except ImportError as e:
-		user_choice = input("The required python library (virtualenv) is not "\
+		user_choice = input("The required python3 library (virtualenv) is not "\
 		"installed globally, do you wish to install this now?: (y|n) ")
-		while not (user_choice == "y" or user_choice == "Y" or user_choice \
-		=="n" or user_choice =="n"):
-			user_choice = input("Please enter a valid option, install python "\
+		while not (user_choice == "y" or user_choice =="n"):
+			user_choice = input("Please enter a valid option, install python3 "\
 			"package (virtualenv) globally? (y|n) ")
-		if user_choice == "y" or user_choice == "Y":
-			pip.main(['install', library])
+		if user_choice == "y":
+			subprocess.call(['pip3', 'install', library])
 		else:
 			print("\nThe virtualenv library is a requirement to run this "\
 			"script, please install this package globally before running this "\
 			"script again or choose \"y\" when prompted.")
 			sys.exit(1)
-	if package_present == "y":
-		print("Dependencies are already met, python package (virtualenv) is "\
-		"installed globally.")
-	else:
-		sys.exit(1)
 
 def create_project_directory():
 	"""
