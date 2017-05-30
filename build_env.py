@@ -121,33 +121,16 @@ def install_package(project_directory, package_name):
 	"""
 	Install a specified python library in a specific virtualenv	directory.
 	"""
-	package_present = ""
-	pip_binary = project_directory + "/env/bin/pip"
-	test = project_directory + "/env/bin/"
-	try:
-		import package_name
-		package_present = "y"
-	except ImportError as e:
-		user_choice = input("The requested package is not installed, do you "\
-		"wish to install this package now?: (y|n) ")
-		while not (user_choice == "y" or user_choice == "n"):
-			user_choice = input("Please enter a valid option, do you want to "\
-			"install the ",package_name, " package (y|n) ")
-		if user_choice == "y":
-			#call pip from the virtualenv dir
-			print("Installing",package_name,"package for the project in the "\
-			"following directory: ", project_directory)
-			subprocess.call([pip_binary, 'install', package_name])
-		else:
-			print("\nYou have chosen NOT to install the following python "\
-			"package: ", package_name, " . The ", project_directory, " project"\
-			" directory has NOT been modified.")
-			sys.exit(1)
-	if package_present == "y":
-		print("Package ",package_name, "is already installed in: "\
-		"",project_directory, " project directory")
+	pip_binary = project_directory + "/env/bin/pip3"
+	get_virtualenv_packages = subprocess.Popen([pip_binary, 'freeze'], stdout=subprocess.PIPE)
+	installed_packages = (get_virtualenv_packages.stdout.read()).split()
+	ve_packages = [str(i) for i in installed_packages]
+	if package_name in ve_packages:
+		print("{0} is already installed.".format(package_name))
 	else:
-		sys.exit(1)
+		print("I will install the package")
+	print(ve_packages)
+	print(type(ve_packages[1]))
 
 def setup_python3_binaries(project_directory):
 	"""
@@ -176,9 +159,9 @@ def main():
 	# installs a package
 	elif (CONSTANT_1 == "-i" and len(argv) == 4):
 		package_name = CONSTANT_3
-		check_dependencies('virtualenv')
+		#check_dependencies('virtualenv')
 		project_directory = create_project_directory()
-		setup_python3_binaries(project_directory)
+		#setup_python3_binaries(project_directory)
 		install_package(project_directory, package_name)
 	else:
 		build_env_help()
