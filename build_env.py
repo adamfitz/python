@@ -124,13 +124,12 @@ def install_package(project_directory, package_name):
 	pip_binary = project_directory + "/env/bin/pip3"
 	get_virtualenv_packages = subprocess.Popen([pip_binary, 'freeze'], stdout=subprocess.PIPE)
 	installed_packages = (get_virtualenv_packages.stdout.read()).split()
-	ve_packages = [str(i) for i in installed_packages]
+	ve_packages = [(i).decode() for i in installed_packages]
 	if package_name in ve_packages:
 		print("{0} is already installed.".format(package_name))
 	else:
 		print("I will install the package")
 	print(ve_packages)
-	print(type(ve_packages[1]))
 
 def setup_python3_binaries(project_directory):
 	"""
