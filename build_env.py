@@ -122,14 +122,18 @@ def install_package(project_directory, package_name):
 	Install a specified python library in a specific virtualenv	directory.
 	"""
 	pip_binary = project_directory + "/env/bin/pip3"
+	# subprocess out to get the list of installed libraries
+	# read the list of installed packages
+	# convert the byte string output to unicode
 	get_virtualenv_packages = subprocess.Popen([pip_binary, 'freeze'], stdout=subprocess.PIPE)
 	installed_packages = (get_virtualenv_packages.stdout.read()).split()
-	ve_packages = [(i).decode() for i in installed_packages]
-	if package_name in ve_packages:
-		print("{0} is already installed.".format(package_name))
+	installed_packages = [(i).decode() for i in installed_packages]
+	# check if the requested package is already installed
+	if any(package_name in packages for packages in installed_packages):
+		print("The > {0} < package is already installed.".format(package_name))
 	else:
-		print("I will install the package")
-	print(ve_packages)
+		print("Installing the > {0} < package.".format(package_name))
+		subprocess.call([pip_binary, 'install', package_name])
 
 def setup_python3_binaries(project_directory):
 	"""
