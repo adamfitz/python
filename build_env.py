@@ -6,7 +6,7 @@ Synopsis:
 A script to setup virtulenv for a new project.
 
 - creates a new project directory
-- installs a package into the a virtualenv project directory
+- installs a package into the virtualenv project directory
 
 Constants:
 ----------
@@ -38,13 +38,13 @@ def build_env_help():
 	print ("")
 	print (
 	"""
-	Name:	build_env.py script
-	-----
+	Filename:	build_env.py
+	---------
 
-	Usage: -h (prints this help screen)
+	Usage: 		-h (prints this help screen)
 	------
 	This script will create a new project directory and setup virtualenv
-	under this directory.  This script has only been tested on linux systems
+	under this directory.  This script has only been tested on a linux system
 	(mint 18).
 
 	The default directory path this script uses is:
@@ -58,10 +58,10 @@ def build_env_help():
 
 	Examples:
 	---------
-	Create a new virtualenv environment in <newProjectName> directory
+	Create a new virtualenv environment in <newProjectName> directory:
 	$ build_env.py -n newProjectName
 
-	Install a package into the <newProjectName> virtualenv directory
+	Install a package into the <newProjectName> virtualenv directory:
 	$ build_env.py -i newProjectName packageName
 	"""
 	)
@@ -86,7 +86,7 @@ def check_dependencies(library):
 		else:
 			print("\nThe virtualenv library is a requirement to run this "\
 			"script, please install this package globally before running this "\
-			"script again or choose \"y\" when prompted.")
+			"script again or choose \"y\" when promptbed.")
 			sys.exit(1)
 
 def create_project_directory():
