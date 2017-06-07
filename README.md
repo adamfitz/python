@@ -11,15 +11,17 @@ found in that IPv4 address block.
 
 **WIP:**
 - Function to support IP address and subnet mask notation
+- Check for /32 host IP and do single look up
 
 ## build_env.py
 
 
 #### Description:
-Creates a project directory and setups up virtualenv based on user input.
+A script to create a new project directory and setup virtualenv under this
+directory
 
 **Current version:**
-0.1
+0.2
 
 **WIP:**
-- Everything at the moment
+- Environment check to return the current status
