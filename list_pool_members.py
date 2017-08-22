@@ -52,6 +52,6 @@ for pool in pool_names:
     for pool_member in pool.members_s.get_collection():
         print("From:", current_pool_name, "pool member: >>", pool_member.name, "<< current state is", pool_member.state )
         pool_member_list.append(pool_member.name)
-#map each member of the list to byte code strings
-pool_member_list = map(str, pool_member_list)
+    #map each member of the list to byte code strings
+    pool_member_list = map(str, pool_member_list)
 #print(pool_member_list)
