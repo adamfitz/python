@@ -11,6 +11,13 @@ Required libraries:
 -------------------
 requests
 f5-sdk
+
+Usage:
+------
+The script requires 3 arguments to run:
+- device name or IP
+- GUI username
+- GUI password
 """
 
 
