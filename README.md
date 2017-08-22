@@ -25,3 +25,15 @@ directory
 
 **WIP:**
 - Environment check to return the current status
+
+## list_pool_members.py
+
+
+#### Description:
+Connect to F5 device, get and report the pool name/members/state
+
+**Current version:**
+0.1
+
+**WIP:**
+- Everything
