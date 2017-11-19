@@ -37,3 +37,15 @@ Connect to F5 device, get and report the pool name/members/state
 
 **WIP:**
 - Everything
+
+## router_ip.py
+
+
+#### Description:
+Connect to TG1 router, login and grab the current WAN IP
+
+**Current version:**
+0.1
+
+**WIP:**
+- Everything
