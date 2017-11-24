@@ -16,8 +16,7 @@ Modules:
 """
 from selenium import webdriver
 from time import sleep
-from lxml import *
-from lxml import html
+from bs4 import *
 
 browser = webdriver.Chrome('./chromedriver')
 router_url = "http://10.23.0.254/login.lp" # router IP addres//web portal login
@@ -43,9 +42,11 @@ browser.get(what_is_my_ip__url) # go to page behind the login page?
 innerHTML = browser.execute_script("return document.body.innerHTML") #returns the inner HTML as a string
 
 # search html and convert to text
-html_element = html.document_fromstring(innerHTML)
-#print(dir(html_element.cssselect))
-div_class_element = html_element.cssselect("\"class=control-group\"")
+html_to_text = BeautifulSoup(innerHTML, 'html.parser')
+raw_page_text = html_to_text.get_text()
+raw_page_text = raw_page_text.split("\n")
+print(raw_page_text)
+
 #element_text = []
 #for instance in div_class_element:
     #text = instance.text_content()
