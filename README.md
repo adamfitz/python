@@ -42,10 +42,10 @@ Connect to F5 device, get and report the pool name/members/state
 
 
 #### Description:
-Connect to TG1 router, login and grab the current WAN IP
+Connect to TG1 router, login and grab the current WAN IP, WAN gateway IP and DNS name server IPs
 
 **Current version:**
-0.1
+0.2
 
 **WIP:**
-- Everything
+- Doing something useful with it (sending an email with the extracted info perhaps)
