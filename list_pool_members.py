@@ -42,15 +42,20 @@ def main():
     while loop:      
         print_menu()
         choice = int(input("Enter your choice [1-5]: "))
-
+        
         if choice == 1:     
-            print("Attemping to get a list of partitions from ")
+            print("Attemping to get a list of partitions from a device \n")
             try:
-                get_device_partitions()
-                print_device_partitions()
+                box_connection_list = connect_to_box()
+                DEVICE_NAME = box_connection_list[0]
+                f5connection = box_connection_list[1]
+                list_of_partitions = get_device_partitions(f5connection)
+                print("List of partitions found on: ",  DEVICE_NAME, "\n")
+                for i in list_of_partitions:
+                    print(i)
+                sys.exit(1)
             except:
                 pass
-            print("option 1")
         elif choice == 2:
             print("Attemping to get a list of all virtual servers from ")
             try:
@@ -76,10 +81,10 @@ def main():
             except:
                 pass
             print("option 4")
-        elif choice==5:
+        elif choice == 5:
             print("Exiting...")
-            sys.exit(1)
             loop = False # Set to false to end the loop
+            sys.exit(1)
         else:
             # anthing other than 1-5 prompts for correct entry
             input("Please enter a selection betwen 1 and 5. Press any key to try again..")
@@ -87,9 +92,6 @@ def main():
 
 def connect_to_box():
     try:
-        #DEVICE_NAME = argv[1]
-        #USER_NAME = argv[2]
-        #PASSWORD = argv[3]
         DEVICE_NAME = input("Enter the F5 device name or IP address: ")
         USER_NAME = input("Please enter F5 username: ")
         PASSWORD = getpass.getpass("Please enter password for F5 device: ")
@@ -99,6 +101,7 @@ def connect_to_box():
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     #connect to the box
     f5connection = f5.bigip.ManagementRoot(DEVICE_NAME, USER_NAME, PASSWORD)
+    return [DEVICE_NAME, f5connection]
 
 def get_pool_list():
     #get the pool name
@@ -124,11 +127,12 @@ def print_pool_members():
         pool_member_list = map(str, pool_member_list)
     #print(pool_member_list)
 
-def get_device_partitions():
-    print("placeholder! :)")
-
-def print_device_partitions():
-    print("placeholder! :)")
+def get_device_partitions(f5connection):
+    list_of_partitions = []
+    for folder in f5connection.tm.sys.folders.get_collection():
+        if not folder.name == "/" and not folder.name.endswith(".app"):
+            list_of_partitions.append(folder.name)
+    return list_of_partitions
 
 if __name__ == "__main__":
     main()
