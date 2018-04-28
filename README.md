@@ -30,7 +30,7 @@ directory
 
 
 #### Description:
-Connect to F5 device, get and report the pool name/members/state
+Connect to F5 device, get virtual servers, pools, pool members, partitions
 
 **Current version:**
 0.1
