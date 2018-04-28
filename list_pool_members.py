@@ -27,12 +27,16 @@ from sys import argv
 import f5.bigip
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import getpass
 
 
 try:
-    DEVICE_NAME = argv[1]
-    USER_NAME = argv[2]
-    PASSWORD = argv[3]
+    #DEVICE_NAME = argv[1]
+    #USER_NAME = argv[2]
+    #PASSWORD = argv[3]
+    DEVICE_NAME = input("Enter the F5 device name or IP address: ")
+    USER_NAME = input("Please enter F5 username: ")
+    PASSWORD = getpass.getpass("Please enter password for F5 device: ")
 except IndexError as not_enough_arguments:
 	pass
 
