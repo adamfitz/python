@@ -41,7 +41,7 @@ def main():
     # loop while true
     while loop:      
         print_menu()
-        choice = input("Enter your choice [1-5]: ")
+        choice = int(input("Enter your choice [1-5]: "))
 
         if choice == 1:     
             print("Attemping to get a list of partitions from ")
@@ -50,28 +50,32 @@ def main():
                 print_device_partitions()
             except:
                 pass
+            print("option 1")
         elif choice == 2:
-            print("Attemping to get a list of all virtual servers from ", DEVICE_NAME)
+            print("Attemping to get a list of all virtual servers from ")
             try:
                 get_device_partitions()
                 print_device_partitions()
             except:
                 pass
+            print("option 2")
         elif choice == 3:
-            print("Attemping to get a list of all pools configured on device ", DEVICE_NAME)
+            print("Attemping to get a list of all pools configured on device ")
             try:
                 get_pool_list()
                 select_pool_name()
                 print_pool_members()
             except:
                 pass
+            print("option 3")
         elif choice == 4:
-            print("Listing the status of all pool members from pool: ", POOL_NAME)
+            print("Listing the status of all pool members from pool: ")
             try:
                 select_pool_name()
                 print_pool_members()
             except:
                 pass
+            print("option 4")
         elif choice==5:
             print("Exiting...")
             sys.exit(1)
