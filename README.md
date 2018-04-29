@@ -26,7 +26,7 @@ directory
 **WIP:**
 - Environment check to return the current status
 
-## list_pool_members.py
+## f5_get_info.py
 
 
 #### Description:
