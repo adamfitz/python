@@ -162,3 +162,7 @@ def get_device_partitions(f5connection):
 
 if __name__ == "__main__":
     main()
+
+# wip catch errors:
+# iControlUnexpectedHTTPError
+# try / except for the above error (authentication)
