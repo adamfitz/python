@@ -11,6 +11,7 @@ Required libraries:
 -------------------
 requests
 f5-sdk
+getpass
 
 Usage:
 ------
@@ -28,7 +29,8 @@ import getpass
 
 def print_menu():
     #print a menu
-    print(6 * "-" , "Please make your selection from the below 5 options" , 6 * "-")
+    print("\n")
+    print(7 * "-" , "Please make your selection from the below 5 options" , 7 * "-")
     print("1. List all device partitions")
     print("2. List all the Virtual servers")
     print("3. List all the Pools")
@@ -59,21 +61,35 @@ def main():
         elif choice == 2:
             print("Attemping to get a list of all virtual servers from ")
             try:
-                get_device_partitions()
-                print_device_partitions()
+                box_connection_list = connect_to_box()
+                DEVICE_NAME = box_connection_list[0]
+                f5connection = box_connection_list[1]
+                list_of_vs = get_vs_list(f5connection)
+                print("The number of configured virtual servers on", DEVICE_NAME, "is:", len(list_of_vs))
+                print("")
+                print("The configured virtual server names on", DEVICE_NAME,"\n")
+                for i in list_of_vs:
+                    print(i)
+                sys.exit(1)
             except:
                 pass
-            print("option 2")
         elif choice == 3:
             print("Attemping to get a list of all pools configured on device ")
             try:
-                get_pool_list()
-                select_pool_name()
-                print_pool_members()
+                box_connection_list = connect_to_box()
+                DEVICE_NAME = box_connection_list[0]
+                f5connection = box_connection_list[1]
+                pool_names = get_pool_list(f5connection)
+                print("Total number of pools found on:", DEVICE_NAME, "is:", len(pool_names))
+                print("")
+                print("List of all pool names found on:", DEVICE_NAME,"\n")
+                for i in pool_names:
+                    print(i)
+                sys.exit(1)
             except:
                 pass
-            print("option 3")
         elif choice == 4:
+            pool_member_name = input("Please enter pool member name:")
             print("Listing the status of all pool members from pool: ")
             try:
                 select_pool_name()
@@ -96,23 +112,25 @@ def connect_to_box():
         USER_NAME = input("Please enter F5 username: ")
         PASSWORD = getpass.getpass("Please enter password for F5 device: ")
     except NameError as something_broke:
-	    pass
+        print("connect_to_box function error")
     #disable insecure connection warning (connecitng via password auth without using a certificate)
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     #connect to the box
     f5connection = f5.bigip.ManagementRoot(DEVICE_NAME, USER_NAME, PASSWORD)
     return [DEVICE_NAME, f5connection]
 
-def get_pool_list():
+def get_pool_list(f5connection):
+    list_of_pools = []
     #get the pool name
-    pool_names = f5connection.tm.ltm.pools.get_collection()
-    print("The number of configured pools on ", DEVICE_NAME, " is: ", len(pool_names))
-    print("The configured pool names are: ", pool_names)
+    pool_name_object = f5connection.tm.ltm.pools.get_collection()
+    for i in pool_name_object:
+        list_of_pools.append(i.name)
+    return list_of_pools
 
 def select_pool_name():
     POOL_NAME = input("Please enter a pool from the resultant list of pools on: ", DEVICE_NAME, ": ")
 
-def print_pool_members():
+def get_pool_members():
     for i in pool_names:
         current_pool_name = i.name
 
@@ -126,6 +144,14 @@ def print_pool_members():
         #map each member of the list to byte code strings
         pool_member_list = map(str, pool_member_list)
     #print(pool_member_list)
+
+def get_vs_list(f5connection):
+    # function gets a list of all configured virtual servers on a device
+    vs_name_object = f5connection.tm.ltm.virtuals.get_collection()
+    list_of_vs = []
+    for i in vs_name_object:
+        list_of_vs.append(i.name)
+    return list_of_vs
 
 def get_device_partitions(f5connection):
     list_of_partitions = []
