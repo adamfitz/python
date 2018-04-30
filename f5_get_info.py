@@ -89,14 +89,22 @@ def main():
             except:
                 pass
         elif choice == 4:
-            pool_member_name = input("Please enter pool member name:")
-            print("Listing the status of all pool members from pool: ")
+            print("Enter device info below to retreive list of configured pools")
             try:
-                select_pool_name()
-                print_pool_members()
+                box_connection_list = connect_to_box()
+                DEVICE_NAME = box_connection_list[0]
+                f5connection = box_connection_list[1]
+                pool_names = get_pool_list(f5connection)
+                for i in pool_names:
+                        print(i)
+                selected_pool = input("Please enter pool member name from the list above: ")
+                pool_members = get_pool_members(f5connection, selected_pool)
+                print("Pool Member:\t State:".expandtabs(4))
+                print(24 * "-")
+                for key in pool_members:
+                    print(key,"\t".expandtabs(4), pool_members[key])
             except:
                 pass
-            print("option 4")
         elif choice == 5:
             print("Exiting...")
             loop = False # Set to false to end the loop
@@ -130,20 +138,13 @@ def get_pool_list(f5connection):
 def select_pool_name():
     POOL_NAME = input("Please enter a pool from the resultant list of pools on: ", DEVICE_NAME, ": ")
 
-def get_pool_members():
-    for i in pool_names:
-        current_pool_name = i.name
-
+def get_pool_members(f5connection, selected_pool):
+    pool_member_dict = {}
+    pool = f5connection.tm.ltm.pools.pool.load(name=selected_pool)
     #get a list of pool members from the test pool
-    pool_member_list = []
-    print("Getting the list of pool members from:", i.name, "and reporting their current state:\n")
-    for pool in pool_names:
-        for pool_member in pool.members_s.get_collection():
-            print("From:", current_pool_name, "pool member: >>", pool_member.name, "<< current state is", pool_member.state )
-            pool_member_list.append(pool_member.name)
-        #map each member of the list to byte code strings
-        pool_member_list = map(str, pool_member_list)
-    #print(pool_member_list)
+    for pool_member in pool.members_s.get_collection():
+        pool_member_dict[pool_member.name] = pool_member.state
+    return pool_member_dict
 
 def get_vs_list(f5connection):
     # function gets a list of all configured virtual servers on a device
