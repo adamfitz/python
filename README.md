@@ -38,6 +38,15 @@ Connect to F5 device, get virtual servers, pools, pool members, partitions
 **WIP:**
 - Everything
 
+## f5_get_version.py
+
+
+#### Description:
+Connect to F5 device, get current software version
+
+**Current version:**
+1.0
+
 ## router_ip.py
 
 
