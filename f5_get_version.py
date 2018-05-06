@@ -26,31 +26,62 @@ import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import getpass
 
-#disable insecure connection warning (connecitng via password auth without using a certificate)
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-# dict to hold ouput
-software_versions = {}
-# ask for the list of devices
-DEVICE_LIST = input("Please enter the file with names of all F5 devices: ")
-try:
-    with open(DEVICE_LIST, "r") as device_list:
-        USER_NAME = input("Please enter F5 username: ")
-        PASSWORD = getpass.getpass("Please enter password for F5 device: ")
-        for line in device_list:
-            try:
-                DEVICE_NAME = line
-                #connect to the box
-                f5connection = f5.bigip.ManagementRoot(DEVICE_NAME, USER_NAME, PASSWORD)
-                # add device name and tmos software version to dict
-                CURRENT_SOFTWARE_VERSION = f5connection.tmos_version
-                software_versions[DEVICE_NAME] = CURRENT_SOFTWARE_VERSION
-                print("Device:", DEVICE_NAME, "== Software Version:", CURRENT_SOFTWARE_VERSION)
-            except Exception as device_connection_error:
-                #print("There is an issue connecting to",DEVICE_NAME,)
-                print(device_connection_error)
-except FileNotFoundError as file_not_found:
-            print("\n== Device list file NOT found, please enter the correct filename. == \n")
+# for testing purposes define the filename
+# DEVICE_LIST = "f5_test_list.txt"
+
+def main():
+    DEVICE_LIST = input("Please enter the file with names of all F5 devices: ")
+    names = read_and_sanitise_file(DEVICE_LIST)
+    get_device_info(names)
+
+
+def read_and_sanitise_file(DEVICE_LIST):
+    box_names = []
+    box_names_checked = []
+    box_names_incorrect = []
+
+    try:
+        with open(DEVICE_LIST, "r") as device_list:
+            # read each line into the list
+            box_names = device_list.readlines()
+            # strip off the newline char from each element in the list
+            box_names = [x.strip("\n") for x in box_names]
+    except FileNotFoundError as file_not_found:
+            print("\n== Device list file NOT found, Please check the file exists and try again. == \n")
             sys.exit(1)
+    
+    # sort list and check if any elements have a space or are empty
+    for i in box_names:
+        if (' ' in i) or (i == ''):
+            box_names_incorrect.append(i)
+        else:
+            box_names_checked.append(i)
+    return box_names_checked
+
+def get_device_info(f5_device_list):
+    user_name = input("Please enter F5 username: ")
+    user_password = getpass.getpass("Please enter password for F5 device: ")
+    # dict to hold ouput
+    software_versions = {}
+    #disable insecure connection warning (connecitng via password auth without using a certificate)
+    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+    try:
+        for f5_name in f5_device_list:
+            # setup connect to the box
+            f5connection = f5.bigip.ManagementRoot(f5_name, user_name, user_password)
+            # add device name and tmos software version to dict
+            f5_software_version = f5connection.tmos_version
+            software_versions[f5_name] = f5_software_version
+            #print("Device:", f5_name, "== Software Version:", f5_software_version)
+    except Exception as device_connection_error:
+        print("There is a problem connecting to", f5_name, "please check connectivity from this workstation.")
+        #print(device_connection_error, "\n") # uncomment this line to enable printing of the exception to stdout
+    
+    for i in software_versions:
+        print(i , "== Software Version:", software_versions[i])
+
+if __name__ == "__main__":
+    main()
 
     
         
