@@ -65,18 +65,17 @@ def get_device_info(f5_device_list):
     software_versions = {}
     #disable insecure connection warning (connecitng via password auth without using a certificate)
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-    try:
-        for f5_name in f5_device_list:
+    
+    for f5_name in f5_device_list:  
+        try:
             # setup connect to the box
             f5connection = f5.bigip.ManagementRoot(f5_name, user_name, user_password)
-            # add device name and tmos software version to dict
             f5_software_version = f5connection.tmos_version
+            # add device name and tmos software version to dict
             software_versions[f5_name] = f5_software_version
-            #print("Device:", f5_name, "== Software Version:", f5_software_version)
-    except Exception as device_connection_error:
-        print("There is a problem connecting to", f5_name, "please check connectivity from this workstation.")
+        except Exception as device_connection_error:
+            print("There is a problem connecting to", f5_name, "please check connectivity / username / password.")
         #print(device_connection_error, "\n") # uncomment this line to enable printing of the exception to stdout
-    
     for i in software_versions:
         print(i , "== Software Version:", software_versions[i])
 
