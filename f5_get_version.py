@@ -71,8 +71,9 @@ def get_device_info(f5_device_list):
             # setup connect to the box
             f5connection = f5.bigip.ManagementRoot(f5_name, user_name, user_password)
             f5_software_version = f5connection.tmos_version
+            f5_hostname = f5connection.hostname
             # add device name and tmos software version to dict
-            software_versions[f5_name] = f5_software_version
+            software_versions[f5_hostname] = f5_software_version
         except Exception as device_connection_error:
             print("There is a problem connecting to", f5_name, "please check connectivity / username / password.")
         #print(device_connection_error, "\n") # uncomment this line to enable printing of the exception to stdout
