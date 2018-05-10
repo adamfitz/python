@@ -78,7 +78,9 @@ def get_device_info(f5_device_list):
             print("There is a problem connecting to", f5_name, "please check connectivity / username / password.")
         #print(device_connection_error, "\n") # uncomment this line to enable printing of the exception to stdout
     for i in software_versions:
-        print(i , "== Software Version:", software_versions[i])
+        # condition to check and print version 12 or greater (point release)
+        if "12." in software_versions[i]:
+            print(i , "== Software Version:", software_versions[i])
 
 if __name__ == "__main__":
     main()
