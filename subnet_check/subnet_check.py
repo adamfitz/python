@@ -43,7 +43,7 @@ def main():
 		#elif len(argv) == 2:
 		#	validate_user_input()
 		else:
-			get_dns_records()
+			get_dns_records(user_cidr_block)
 
 	except IndexError as not_enough_args:
 		print(f"\r\nError: Not enough Arguments.")
@@ -51,25 +51,29 @@ def main():
 
 
 
-def get_dns_records():
-	#convert to unicode object
-	unicode_address_block = unicode(user_cidr_block)
+def get_dns_records(user_cidr_block):
+	"""
+	This function will do some clean up/checks on the input and attempt
+	to retrieve the PTR records for teh given IPv4 CIDR block.
+	"""
+	# make sure the user input is a string:
+	user_cidr_block = str(user_cidr_block)
+
 	#create an IPv4Network class
-	users_ip_block = ipaddress.ip_network(unicode_address_block, strict=False)
+	ipv4_address_block = ipaddress.ip_network(user_cidr_block, strict=False)
 	#get the subnet mask as string
-	address_block_subnet_mask = str(users_ip_block.netmask)
+	address_block_subnet_mask = str(ipv4_address_block.netmask)
 	#get the total number of IPs in the block
-	number_of_ipv4_host_addresses = users_ip_block.num_addresses
+	number_of_ipv4_host_addresses = ipv4_address_block.num_addresses
 
 	#Output some basic information
 	print ("")
 	print ("You have entered the network: {0}, the subnet mask is: {1}".format
 		(user_cidr_block, address_block_subnet_mask))
-	print ("The number of IPv4 addresses in this address block is: {0}".format
-		(number_of_ipv4_host_addresses))
+	print (f"The number of IPv4 addresses in this address block is: {number_of_ipv4_host_addresses}")
 	print ("")
 	#get all the host IPs
-	all_host_ips = list(users_ip_block.hosts())
+	all_host_ips = list(ipv4_address_block.hosts())
 	#convert the unicode list back to a byte string list
 	ips_to_iterate_through = map(str, all_host_ips)
 	#var to count the number of returned PTRs
