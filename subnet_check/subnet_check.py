@@ -1,20 +1,24 @@
 #!/usr/bin/env python3.6
 """
 Author: Adam Fitzgerald
-Purpose: Take an IPv4 address block in CIDR notation and return all DNS records
-found in that IPv4 address block.
+Purpose: Take an IPv4 or IPv6 address block in CIDR notation and return all DNS 
+records found in the given address block.
 
-Version: 1.3
+Version: 1.4
 
 Usage:
 subnet_check.py -h (prints the help screen)
 subnet_check.py 192.0.2.0/24
-subnet_check.py 198.51.100.0/25
 subnet_check.py 203.0.113.0/29
+
+subnet_check.py 2001:db8::/32
+subnet_check.py 2001:db8::1/128
 
 All correct CIDR notation is accepted however be aware the script may appear
 to hang or pause for an excessive period of time when iterating through
 large address blocks or if there are not many DNS records are present/found.
+
+Python version: 3.6 or above
 
 Modules:
 The ipaddress and socket modules are used.
@@ -46,35 +50,43 @@ def main():
 			get_dns_records(user_cidr_block)
 
 	except IndexError as not_enough_args:
-		print(f"\r\nError: Not enough Arguments.")
-		subnet_check_usage()
-
-
+		print(f"\r\n:: Error :: Not enough Arguments.\r\n\r\nHelp Command:\r\nsubnet_check.py -h\r\n")
+	except ValueError as not_valid_network:
+		print(f"\r\n:: Error :: Invalid IPv4 or IPv6 address.\r\n\r\nHelp Command:\r\nsubnet_check.py -h\r\n")
 
 def get_dns_records(user_cidr_block):
 	"""
-	This function will do some clean up/checks on the input and attempt
-	to retrieve the PTR records for the given IPv4 CIDR block.
+	This function attempts to create an ip_address object and retrieve the
+	associated PTR records for the given address block.
 	"""
 	# make sure the user input is a string:
 	user_cidr_block = str(user_cidr_block)
 
-	# create IPv4Network class
-	ipv4_address_block = ipaddress.ip_network(user_cidr_block, strict=False)
+	# create network class
+	address_block = ipaddress.ip_network(user_cidr_block, strict=False)
 	# subnet mask as string
-	address_block_subnet_mask = str(ipv4_address_block.netmask)
-	# total Ipv4 addresses
-	number_of_ipv4_host_addresses = ipv4_address_block.num_addresses
+	address_block_subnet_mask = str(address_block.netmask)
+	# total addresses
+	total_host_addresses = address_block.num_addresses
 
-	#Output some basic information
+	# determine address family accordingly
+	address_family = address_block.version
+	if address_family == 6:
+    		address_family = "IPv6"
+	else:
+		address_family = "IPv4"
+
+	# Output summary info
 	print ("")
+	print(f"Addressess family:\t{address_family}")
 	print (f"Address block:\t\t{user_cidr_block}\r\nSubnet mask:\t\t{address_block_subnet_mask}")
-	print (f"Total IPv4 addresses:\t{number_of_ipv4_host_addresses}")
+	print (f"Total addresses:\t{total_host_addresses}")
 	print ("")
-	# grab all ipv4 hosts
-	all_host_ips = list(ipv4_address_block.hosts())
 
-	#convert the list of ipaddress classes back to strings
+	# assign all host addresses to a list
+	all_host_ips = list(address_block.hosts())
+
+	# convert the list of ipaddress module classes back to strings
 	ips_to_iterate_through = map(str, all_host_ips)
 
 	# counter for returned PTRs
@@ -89,23 +101,31 @@ def get_dns_records(user_cidr_block):
 			ptr_counter =+ 1
 		except socket.herror as unknownHostError:
 			continue
-	print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {number_of_ipv4_host_addresses}")
+	print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
 
 def subnet_check_usage():
+    # the below string is purposely not indented to work around the issue with 
+	# triple quoted strings and the default indent.
 	print(
 	f"""
 subnet_check script
 Usage: -h (prints this help screen)
 
-Take an IPv4 address block in CIDR notation and return all DNS records found
-in that IPv4 address block.
+Take an IPv4 or IPv6 address block in CIDR notation and return all DNS 
+records found in the given address block.
 
-Example: subnet_check.py 172.16.0.1/16
+Example: 
+subnet_check.py 172.16.0.1/24
+subnet_check.py 2001:db8::1/128
 
 Warning: When large address blocks are specified the script will take some 
 time to run, likewise if there are not many PTR records present/found.
+
+NOTE: It is NOT recommended to run this against a large IPv6 address block as
+there is progress indicator implemented and it will be difficult to determine 
+if the script is still running or not.
 """
-	) #the string is "de intented" on purpose to remove the default triple quote intent
+	) # the string is "de intented" on purpose to remove the default triple quote intent
 """
 def validate_user_input():
 	try:
