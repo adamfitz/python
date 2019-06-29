@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 """
 Author: Adam Fitzgerald
 Purpose: Take an IPv4 address block in CIDR notation and return all DNS records
@@ -31,8 +31,25 @@ from sys import argv
 import ipaddress
 import socket
 
-# global variable to grab the CIDR block
-user_cidr_block = argv[1]
+def main():
+	try:
+		# global variable to grab the CIDR block
+		user_cidr_block = argv[1]
+
+		if len(argv) != 2:
+			subnet_check_usage()
+		elif argv[1] == "-h":
+			subnet_check_usage()
+		#elif len(argv) == 2:
+		#	validate_user_input()
+		else:
+			get_dns_records()
+
+	except IndexError as not_enough_args:
+		print(f"\r\nError: Not enough Arguments.")
+		subnet_check_usage()
+
+
 
 def get_dns_records():
 	#convert to unicode object
@@ -71,24 +88,21 @@ def get_dns_records():
 		% (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
 
 def subnet_check_usage():
-	print ("")
-	print (
-	"""
-	subnet_check script
-	Usage: -h (prints this help screen)
+	print(
+	f"""
+subnet_check script
+Usage: -h (prints this help screen)
 
-	Take an IPv4 address block in CIDR notation and return all DNS records found
-	in that IPv4 address block.
+Take an IPv4 address block in CIDR notation and return all DNS records found
+in that IPv4 address block.
 
-	Example: subnet_check.py 172.16.0.1/16
+Example: subnet_check.py 172.16.0.1/16
 
-	Warning: The script may take some time to run when address blocks larger
-	than /24 are supplied.  The script may also appear to be hung or pause
-	for an excessive period of time when iterating through large address blocks
-	or alternatively if there are not many DNS records present/found.
-	"""
-	)
-
+Warning: When large address blocks are specified the script will take some 
+time to run, likewise if there are not many PTR records present/found.
+"""
+	) #the string is "de intented" on purpose to remove the default triple quote intent
+"""
 def validate_user_input():
 	try:
 		#split the input into subnet bits for validation
@@ -117,16 +131,7 @@ def validate_user_input():
 			get_dns_records()
 	except (IndexError, ValueError) as validationErrors:
 		subnet_check_usage()
-
-def main():
-	if len(argv) != 2:
-		subnet_check_usage()
-	elif argv[1] == "-h":
-		subnet_check_usage()
-	elif len(argv) == 2:
-		validate_user_input()
-	else:
-		get_dns_records()
+"""
 
 if __name__ == "__main__":
 	main()
