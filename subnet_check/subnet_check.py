@@ -92,15 +92,7 @@ def get_dns_records(user_cidr_block):
 	# counter for returned PTRs
 	ptr_counter = 0
 
-	# need to write if statement for a single IP and throw it out of the loop
-	# if only 1 address is given
-
-	# show me the sata type for a sinle address (list or string?)
-	#print(f"What is the data type of a single Ip address?? {all_host_ips}")  # <- nothing it is an empty list
-	#print(f"What functions do I have?? ?? {dir(address_block)}")  
-	#print(f"Testing... {type(address_block.netmask)}")
-
-
+	# for /32 or /128 do a single loop up else iterate through the block
 	if (str(address_block.netmask) == "255.255.255.255") or (str(address_block.netmask) == "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"):
 		try:
 			lookup_address = str(address_block.network_address)
@@ -119,13 +111,9 @@ def get_dns_records(user_cidr_block):
 				continue
 		print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
 
-
-
-	
-
 def subnet_check_usage():
-	# the below string is purposely not indented to work around the issue with 
-	# triple quoted strings and the default indent.
+	# the below string is purposely not indented to work around the default indent 
+	# on triple quoted strings.
 	print(
 	f"""
 subnet_check script
@@ -146,36 +134,7 @@ there is progress indicator implemented and it will be difficult to determine
 if the script is still running or not.
 """
 	) # the string is "de intented" on purpose to remove the default triple quote intent
-"""
-def validate_user_input():
-	try:
-		#split the input into subnet bits for validation
-		subnetmask_bits = user_cidr_block.split("/")
-		subnetmask_bits_string = subnetmask_bits[1]
-		subnetmask_bits_integer = int(subnetmask_bits_string)
-		#split network bits into 4 octets for validation
-		network_address = subnetmask_bits[0]
-		network_address_octects = network_address.split(".")
 
-		if len(subnetmask_bits) != 2:
-			subnet_check_usage()
-		elif len(network_address_octects) < 3:
-			subnet_check_usage()
-		elif user_cidr_block == "-h":
-			subnet_check_usage()
-		elif (subnetmask_bits_integer < 1):
-			print ("\nThe prefix bits should not be less than 1")
-			print ("You entered:",subnetmask_bits_integer)
-			subnet_check_usage()
-		elif (subnetmask_bits_integer > 32):
-			print ("\nThe prefix bits should not be greater than 32")
-			print ("You entered:",subnetmask_bits_integer)
-			subnet_check_usage()
-		else:
-			get_dns_records()
-	except (IndexError, ValueError) as validationErrors:
-		subnet_check_usage()
-"""
 
 if __name__ == "__main__":
 	main()
