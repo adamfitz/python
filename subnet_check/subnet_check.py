@@ -54,23 +54,22 @@ def main():
 def get_dns_records(user_cidr_block):
 	"""
 	This function will do some clean up/checks on the input and attempt
-	to retrieve the PTR records for teh given IPv4 CIDR block.
+	to retrieve the PTR records for the given IPv4 CIDR block.
 	"""
 	# make sure the user input is a string:
 	user_cidr_block = str(user_cidr_block)
 
-	#create an IPv4Network class
+	# create IPv4Network class
 	ipv4_address_block = ipaddress.ip_network(user_cidr_block, strict=False)
-	#get the subnet mask as string
+	# subnet mask as string
 	address_block_subnet_mask = str(ipv4_address_block.netmask)
-	#get the total number of IPs in the block
+	# total Ipv4 addresses
 	number_of_ipv4_host_addresses = ipv4_address_block.num_addresses
 
 	#Output some basic information
 	print ("")
-	print ("You have entered the network: {0}, the subnet mask is: {1}".format
-		(user_cidr_block, address_block_subnet_mask))
-	print (f"The number of IPv4 addresses in this address block is: {number_of_ipv4_host_addresses}")
+	print (f"Address block:\t\t{user_cidr_block}\r\nSubnet mask:\t\t{address_block_subnet_mask}")
+	print (f"Total IPv4 addresses:\t{number_of_ipv4_host_addresses}")
 	print ("")
 	# grab all ipv4 hosts
 	all_host_ips = list(ipv4_address_block.hosts())
@@ -78,7 +77,7 @@ def get_dns_records(user_cidr_block):
 	#convert the list of ipaddress classes back to strings
 	ips_to_iterate_through = map(str, all_host_ips)
 
-	# cpunter for returned PTRs
+	# counter for returned PTRs
 	ptr_counter = 0
 
 	# need to write if statement for a single IP and throw it out of the loop
@@ -86,12 +85,11 @@ def get_dns_records(user_cidr_block):
 	for i in ips_to_iterate_through:
 		try:
 			ptr_record = list(socket.gethostbyaddr(i))
-			print ("%-20s %-20s" % (i, ptr_record[0]))
-			ptr_counter = ptr_counter  + 1
+			print(f"{i} \t {ptr_record[0]}")
+			ptr_counter =+ 1
 		except socket.herror as unknownHostError:
 			continue
-	print ("\nThe number of returned PTR records is: %s, out of a potential %s"
-		% (ptr_counter , number_of_ipv4_host_addresses))
+	print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {number_of_ipv4_host_addresses}")
 
 def subnet_check_usage():
 	print(
