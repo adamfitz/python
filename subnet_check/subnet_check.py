@@ -65,21 +65,21 @@ def get_dns_records(user_cidr_block):
 	# create network class
 	address_block = ipaddress.ip_network(user_cidr_block, strict=False)
 	# subnet mask as string
-	address_block_subnet_mask = str(address_block.netmask)
+	subnet_mask = str(address_block.netmask)
 	# total addresses
 	total_host_addresses = address_block.num_addresses
 
 	# determine address family accordingly
 	address_family = address_block.version
 	if address_family == 6:
-    		address_family = "IPv6"
+			address_family = "IPv6"
 	else:
 		address_family = "IPv4"
 
 	# Output summary info
 	print ("")
 	print(f"Addressess family:\t{address_family}")
-	print (f"Address block:\t\t{user_cidr_block}\r\nSubnet mask:\t\t{address_block_subnet_mask}")
+	print (f"Address block:\t\t{user_cidr_block}\r\nSubnet mask:\t\t{subnet_mask}")
 	print (f"Total addresses:\t{total_host_addresses}")
 	print ("")
 
@@ -94,17 +94,38 @@ def get_dns_records(user_cidr_block):
 
 	# need to write if statement for a single IP and throw it out of the loop
 	# if only 1 address is given
-	for i in ips_to_iterate_through:
+
+	# show me the sata type for a sinle address (list or string?)
+	#print(f"What is the data type of a single Ip address?? {all_host_ips}")  # <- nothing it is an empty list
+	#print(f"What functions do I have?? ?? {dir(address_block)}")  
+	#print(f"Testing... {address_block.network_address}")
+
+
+	if (subnet_mask == "255.255.255.255") or (subnet_mask == "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"):
 		try:
-			ptr_record = list(socket.gethostbyaddr(i))
-			print(f"{i} \t {ptr_record[0]}")
+			lookup_address = str(address_block.network_address)
+			ptr_record = socket.gethostbyaddr(lookup_address)
+			print(f"{lookup_address} \t {ptr_record[0]}")
 			ptr_counter =+ 1
 		except socket.herror as unknownHostError:
-			continue
-	print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
+			pass
+		print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
+	else:
+		for i in ips_to_iterate_through:
+			try:
+				ptr_record = list(socket.gethostbyaddr(i))
+				print(f"{i} \t {ptr_record[0]}")
+				ptr_counter =+ 1
+			except socket.herror as unknownHostError:
+				continue
+			print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
+
+
+
+	
 
 def subnet_check_usage():
-    # the below string is purposely not indented to work around the issue with 
+	# the below string is purposely not indented to work around the issue with 
 	# triple quoted strings and the default indent.
 	print(
 	f"""
