@@ -72,12 +72,14 @@ def get_dns_records(user_cidr_block):
 		(user_cidr_block, address_block_subnet_mask))
 	print (f"The number of IPv4 addresses in this address block is: {number_of_ipv4_host_addresses}")
 	print ("")
-	#get all the host IPs
+	# grab all ipv4 hosts
 	all_host_ips = list(ipv4_address_block.hosts())
-	#convert the unicode list back to a byte string list
+
+	#convert the list of ipaddress classes back to strings
 	ips_to_iterate_through = map(str, all_host_ips)
-	#var to count the number of returned PTRs
-	total_number_of_returned_ptr_records = 0
+
+	# cpunter for returned PTRs
+	ptr_counter = 0
 
 	# need to write if statement for a single IP and throw it out of the loop
 	# if only 1 address is given
@@ -85,11 +87,11 @@ def get_dns_records(user_cidr_block):
 		try:
 			ptr_record = list(socket.gethostbyaddr(i))
 			print ("%-20s %-20s" % (i, ptr_record[0]))
-			total_number_of_returned_ptr_records = total_number_of_returned_ptr_records + 1
+			ptr_counter = ptr_counter  + 1
 		except socket.herror as unknownHostError:
 			continue
 	print ("\nThe number of returned PTR records is: %s, out of a potential %s"
-		% (total_number_of_returned_ptr_records, number_of_ipv4_host_addresses))
+		% (ptr_counter , number_of_ipv4_host_addresses))
 
 def subnet_check_usage():
 	print(
