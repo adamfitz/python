@@ -98,18 +98,17 @@ def get_dns_records(user_cidr_block):
 	# show me the sata type for a sinle address (list or string?)
 	#print(f"What is the data type of a single Ip address?? {all_host_ips}")  # <- nothing it is an empty list
 	#print(f"What functions do I have?? ?? {dir(address_block)}")  
-	#print(f"Testing... {address_block.network_address}")
+	#print(f"Testing... {type(address_block.netmask)}")
 
 
-	if (subnet_mask == "255.255.255.255") or (subnet_mask == "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"):
+	if (str(address_block.netmask) == "255.255.255.255") or (str(address_block.netmask) == "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"):
 		try:
 			lookup_address = str(address_block.network_address)
 			ptr_record = socket.gethostbyaddr(lookup_address)
 			print(f"{lookup_address} \t {ptr_record[0]}")
 			ptr_counter =+ 1
 		except socket.herror as unknownHostError:
-			pass
-		print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
+			print(f"No DNS entry found")
 	else:
 		for i in ips_to_iterate_through:
 			try:
@@ -118,7 +117,7 @@ def get_dns_records(user_cidr_block):
 				ptr_counter =+ 1
 			except socket.herror as unknownHostError:
 				continue
-			print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
+		print (f"\r\nReturned PTR records: {ptr_counter}, out of the total: {total_host_addresses}")
 
 
 
