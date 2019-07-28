@@ -92,7 +92,7 @@ def get_dns_records(user_cidr_block):
 	# counter for returned PTRs
 	ptr_counter = 0
 
-	# for /32 or /128 do a single loop up else iterate through the block
+	# for /32 or /128 do a single lookup
 	if (str(address_block.netmask) == "255.255.255.255") or (str(address_block.netmask) == "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"):
 		try:
 			lookup_address = str(address_block.network_address)
@@ -101,11 +101,12 @@ def get_dns_records(user_cidr_block):
 			ptr_counter =+ 1
 		except socket.herror as unknownHostError:
 			print(f"No DNS entry found")
+	# iterate through the block if the given subnet contains more than one IP
 	else:
-		for i in ips_to_iterate_through:
+		for address in ips_to_iterate_through:
 			try:
-				ptr_record = list(socket.gethostbyaddr(i))
-				print(f"{i} \t {ptr_record[0]}")
+				ptr_record = list(socket.gethostbyaddr(address))
+				print(f"{address} \t {ptr_record[0]}")
 				ptr_counter =+ 1
 			except socket.herror as unknownHostError:
 				continue
