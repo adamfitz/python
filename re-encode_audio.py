@@ -20,14 +20,15 @@ directory = os.getcwd()
 # files in working dir and sub dirs
 pathlist = Path(directory).glob('**/*')
 
+file_ext = (".mkv", ".mp4", ".avi", ".webm")
+
 try:
     for all_files in pathlist:
         # all_files is an object not a string
         file_and_path = (str(all_files))
         # original filename and path = file_and_path
         # determine if video file based on file extension
-        if file_and_path.endswith(".mkv") or file_and_path.endswith(".mp4") or \
-                file_and_path.endswith(".avi") or file_and_path.endswith(".webm"):
+        if file_and_path.endswith(file_ext) and "re-encode" not in file_and_path:
 
             # original filename only = filename
             filename = str((file_and_path.split("/"))[-1])
@@ -47,7 +48,7 @@ try:
                 # attempt re-encode audio to mp3 keeping video intact
                 subprocess.run(
                     ["ffmpeg", "-i", f"{file_and_path}", "-acodec", "mp3",
-                     "-vcodec", "copy", f"{target_dir}/{target_filename}"])
+                     "-vcodec", "copy", f"{target_dir}/{target_filename}", "-y"])
                 print(f"")
             except Exception as broken:
                 logging.error("something broke attempting to re encode audio")
